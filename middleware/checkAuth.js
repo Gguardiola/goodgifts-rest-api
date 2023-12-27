@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Middleware error:', error.message);
         if (error.response) {
             console.error('Response details:', error.response.data);
             return res.status(error.response.status).json(error.response.data);
