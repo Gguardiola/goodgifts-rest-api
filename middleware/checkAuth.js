@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     const authorization = req.headers.authorization;
 
     if (!authorization) {
-        return res.status(402).json({ success: false, message: 'Token not provided' });
+        return res.status(400).json({ success: false, message: 'Token not provided' });
     }
 
     try {
@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        console.error('Middleware error:', error.message);
+        console.error('Error:', error.message);
         if (error.response) {
             console.error('Response details:', error.response.data);
             return res.status(error.response.status).json(error.response.data);
