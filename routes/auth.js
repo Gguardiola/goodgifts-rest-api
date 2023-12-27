@@ -2,12 +2,13 @@ const router = require('express').Router();
 const {check, validationResult} = require('express-validator');
 const axios = require('axios');
 const checkAuth = require('../middleware/checkAuth');
+const requestLimiter = require('./middleware/requestLimiter');
 if(process.env.NODE_ENV != "production") require('dotenv').config();
 const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST; 
 //Explanation: These are the routes that will be used by the client to signup and login.
 
 // POST /auth/signup
-router.post('/signup', async (req, res) => {
+router.post('/signup', requestLimiter, async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -30,7 +31,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // POST /auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', requestLimiter, async (req, res) => {
     const { email, password } = req.body;
 
     try {
