@@ -53,7 +53,8 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', checkAuth, async (req, res) => {
-    const token = req.headers.authorization;
+    
+    const token  = req.headers.authorization;
 
     try {
         const response = await axios.post(`${AUTH_SERVICE_HOST}/logout`, { token });
