@@ -51,4 +51,26 @@ router.post('/login', async (req, res) => {
 
 });
 
+router.post('/logout', checkAuth, async (req, res) => {
+    const token = req.headers.authorization;
+
+    try {
+        const response = await axios.post(`${AUTH_SERVICE_HOST}/logout`, { token });
+        if (!response.data.success) {
+            return res.status(response.status).json(response.data);
+        }
+        res.json({success: true, message: 'Logout successful'});
+
+    } catch (error) {
+        console.error('Error:', error.message);
+        if (error.response) {
+            console.error('Response details:', error.response.data);
+            return res.status(error.response.status).json(error.response.data);
+        } else {
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
+
+});
+
 module.exports = router;
