@@ -8,11 +8,19 @@ module.exports = async (req, res, next) => {
     const authorization = req.headers.authorization;
 
     if (!authorization) {
-        return res.status(401).json({ success: false, message: 'Token not provided' });
+        return res.status(402).json({ success: false, message: 'Token not provided' });
     }
 
     try {
-        const response = await axios.post(`${AUTH_SERVICE_HOST}/validate`, { authorization });
+        const response = await axios.post(
+            `${AUTH_SERVICE_HOST}/validate`,
+            {},
+            {
+                headers: {
+                    Authorization: req.headers.authorization
+                }
+            }
+        );
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
