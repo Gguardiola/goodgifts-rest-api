@@ -5,14 +5,14 @@ const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST;
 //Explanation: This is a middleware function that will be used to validate the token sent by the client.
 module.exports = async (req, res, next) => {
 
-    const token = req.headers.authorization;
+    const {authorization} = req.headers;
 
-    if (!token) {
+    if (!authorization) {
         return res.status(401).json({ success: false, message: 'Token not provided' });
     }
 
     try {
-        const response = await axios.post(`${AUTH_SERVICE_HOST}/validate`, { token });
+        const response = await axios.post(`${AUTH_SERVICE_HOST}/validate`, { authorization });
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
