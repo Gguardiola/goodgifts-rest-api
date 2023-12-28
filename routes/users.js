@@ -3,8 +3,8 @@ const { validationResult, param } = require('express-validator');
 const checkAuth = require('../middleware/checkAuth');
 
 // GET /users/getId/:requestedUser
-router.get('/getId/:requestedUser',[
-    param('requestedUser').isInt({ min: 1 }).withMessage('Invalid requestedUser')
+router.get('/getId',[
+    param('fromEmail').isInt({ min: 1 }).withMessage('Invalid fromEmail')
 
 ], checkAuth, async (req, res) => {
 
@@ -15,13 +15,8 @@ router.get('/getId/:requestedUser',[
     }
 
     try {
-        const requestedUser = req.params.requestedUser;
-
-        //check if the user is requesting exists   
-        const userExists = await checkIfUserExists(requestedUser);
-        if (!userExists.rows.length > 0) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
+        const requestedUser = req.query.fromEmail;
+        
         let userId = await retrieveUserId(requestedUser);
         userId = userId.rows[0];
         

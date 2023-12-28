@@ -15,8 +15,8 @@ const retrievePublicUserProfile = async (userId) => {
   return result;
 };
 
-const retrieveUserId = async (userId) => {
-  const result = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
+const retrieveUserId = async (email) => {
+  const result = await db.query('SELECT id FROM users WHERE email = $1', [email]);
   return result;
 };
 
@@ -25,6 +25,6 @@ module.exports = {
   checkIfUserExists,
   retrieveUserProfile,
   retrievePublicUserProfile,
-  retrieveUserId
-
+  retrieveUserId,
+  
 };
