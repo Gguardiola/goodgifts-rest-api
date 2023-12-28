@@ -35,7 +35,7 @@ router.get('/getId/:requestedUser',[
 });
 
 // GET /users/profile/:requestedUser
-router.get('/profile/:requestedUser',[
+router.get('/profile',[
     param('requestedUser').isInt({ min: 1 }).withMessage('Invalid requestedUser')
 
 ], checkAuth, async (req, res) => {
@@ -48,7 +48,7 @@ router.get('/profile/:requestedUser',[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.params.requestedUser;
+        const requestedUser = req.query.requestedUser;
 
         // check if the user is requesting his own profile, if so, return his profile
         if (userId == requestedUser) {
