@@ -4,7 +4,7 @@ const checkAuth = require('../middleware/checkAuth');
 
 // GET /users/getId/:requestedUser
 router.get('/getId',[
-    param('fromEmail').isInt({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
+    param('fromEmail').isLength({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
 
 ], checkAuth, async (req, res) => {
 
@@ -31,7 +31,7 @@ router.get('/getId',[
 
 // GET /users/profile/:requestedUser
 router.get('/profile',[
-    param('userId').isInt({ min: 1 }).withMessage('Invalid userId')
+    param('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 
 ], checkAuth, async (req, res) => {
 
