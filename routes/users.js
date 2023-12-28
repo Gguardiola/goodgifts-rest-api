@@ -17,7 +17,7 @@ router.get('/getId',[
     try {
         const requestedUser = req.query.fromEmail;
 
-        let userId = await retrieveUserId(requestedUser);
+        let userId = await db.retrieveUserId(requestedUser);
         userId = userId.rows[0];
         
         res.json({ success: true, userId });
@@ -47,7 +47,7 @@ router.get('/profile',[
 
         // check if the user is requesting his own profile, if so, return his profile
         if (userId == requestedUser) {
-            let userProfile = await retrieveUserProfile(userId);
+            let userProfile = await db.retrieveUserProfile(userId);
         
             if (!userProfile.rows.length > 0) {
               return res.status(404).json({ success: false, message: 'User profile not found' });
@@ -59,12 +59,12 @@ router.get('/profile',[
         }
 
         //check if the user is requesting exists   
-        const userExists = await checkIfUserExists(requestedUser);
+        const userExists = await db.checkIfUserExists(requestedUser);
         if (!userExists.rows.length > 0) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
         //if is not his own profile, send only the public information
-        let userProfile = await retrievePublicUserProfile(requestedUser);
+        let userProfile = await db.retrievePublicUserProfile(requestedUser);
         userProfile = userProfile.rows[0];
 
         res.json({ success: true, userProfile });

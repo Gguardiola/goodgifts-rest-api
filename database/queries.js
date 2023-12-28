@@ -1,7 +1,7 @@
 const db = require('./db');
 
 const checkIfUserExists = async (userId) => {
-  const result = await db.query('SELECT * FROM users WHERE email = $1', [userId]);
+  const result = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
   return result;
 };
 
