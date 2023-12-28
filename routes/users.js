@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { validationResult, param } = require('express-validator');
+const { validationResult, param, query } = require('express-validator');
 const checkAuth = require('../middleware/checkAuth');
 
 // GET /users/getId/:requestedUser
 router.get('/getId',[
-    param('fromEmail').isLength({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
+    query('fromEmail').isLength({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
 
 ], checkAuth, async (req, res) => {
 
@@ -31,7 +31,7 @@ router.get('/getId',[
 
 // GET /users/profile/:requestedUser
 router.get('/profile',[
-    param('userId').isLength({ min: 1 }).withMessage('Invalid userId')
+    query('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 
 ], checkAuth, async (req, res) => {
 
