@@ -6,7 +6,7 @@ router.get('/public', (req, res) => {
     res.json(publicPosts);
 });
 
-router.get('/private', checkAuth, (req, res) => {
+router.get('/private/:userId', checkAuth, (req, res) => {
     res.json(privatePosts);
 });
 

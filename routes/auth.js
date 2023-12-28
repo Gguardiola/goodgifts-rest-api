@@ -15,7 +15,7 @@ router.post('/signup', requestLimiter, async (req, res) => {
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
-        res.json({success: true, token: response.data.token});
+        res.json({success: true});
 
     } catch (error) {
         console.error('Error:', error.message);

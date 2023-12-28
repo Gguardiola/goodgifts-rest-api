@@ -24,6 +24,9 @@ module.exports = async (req, res, next) => {
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
+
+        req.userId = response.data.userId;
+
         next();
     } catch (error) {
         console.error('Error:', error.message);
