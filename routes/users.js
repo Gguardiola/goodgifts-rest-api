@@ -19,6 +19,10 @@ router.get('/getId',[
         const requestedUser = req.query.fromEmail;
 
         let userId = await db.retrieveUserId(requestedUser);
+        if (!userId.rows.length > 0) {
+            return res.status(404).json({ success: false, message: 'UserId not found' });
+        }
+
         userId = userId.rows[0];
         
         res.json({ success: true, userId: userId.id });
