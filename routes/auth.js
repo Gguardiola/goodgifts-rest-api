@@ -8,10 +8,10 @@ const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST;
 
 // POST /auth/signup
 router.post('/signup', requestLimiter, async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, username, lastname, birthday } = req.body;
 
     try {
-        const response = await axios.post(`${AUTH_SERVICE_HOST}/signup`, { email, password });
+        const response = await axios.post(`${AUTH_SERVICE_HOST}/signup`, { email, password, username, lastname, birthday });
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
