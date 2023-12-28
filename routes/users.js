@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { validationResult, param, query } = require('express-validator');
 const checkAuth = require('../middleware/checkAuth');
+const db = require('../database/queries')
 
 // GET /users/getId/:requestedUser
 router.get('/getId',[
