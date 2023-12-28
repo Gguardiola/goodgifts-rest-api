@@ -6,11 +6,9 @@ const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST;
 module.exports = async (req, res, next) => {
 
     const authorization = req.headers.authorization;
-
     if (!authorization) {
         return res.status(400).json({ success: false, message: 'Token not provided' });
     }
-
     try {
         const response = await axios.post(
             `${AUTH_SERVICE_HOST}/validate`,
@@ -24,7 +22,6 @@ module.exports = async (req, res, next) => {
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
-
         req.userId = response.data.userId;
 
         next();

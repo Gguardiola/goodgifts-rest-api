@@ -21,7 +21,7 @@ router.get('/getId',[
         let userId = await db.retrieveUserId(requestedUser);
         userId = userId.rows[0];
         
-        res.json({ success: true, userId });
+        res.json({ success: true, userId: userId.id });
         
 
       } catch (error) {
