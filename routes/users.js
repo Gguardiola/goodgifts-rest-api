@@ -16,7 +16,7 @@ router.get('/getId',[
 
     try {
         const requestedUser = req.query.fromEmail;
-        
+
         let userId = await retrieveUserId(requestedUser);
         userId = userId.rows[0];
         
@@ -31,7 +31,7 @@ router.get('/getId',[
 
 // GET /users/profile/:requestedUser
 router.get('/profile',[
-    param('requestedUser').isInt({ min: 1 }).withMessage('Invalid requestedUser')
+    param('userId').isInt({ min: 1 }).withMessage('Invalid userId')
 
 ], checkAuth, async (req, res) => {
 
@@ -43,7 +43,7 @@ router.get('/profile',[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.query.requestedUser;
+        const requestedUser = req.query.userId;
 
         // check if the user is requesting his own profile, if so, return his profile
         if (userId == requestedUser) {
