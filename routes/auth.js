@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const {check, validationResult} = require('express-validator');
 const axios = require('axios');
 const checkAuth = require('../middleware/checkAuth');
 const requestLimiter = require('../middleware/requestLimiter');
