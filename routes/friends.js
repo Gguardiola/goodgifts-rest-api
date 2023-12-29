@@ -28,7 +28,7 @@ router.get('/getAll', [
             return res.status(400).json({ success: false, message: 'Invalid userId' });
         }
         const friends = await db.retrieveFriends(userId, limit, offset);
-        res.json({ success: true, friends: friends });
+        res.json({ success: true, friends: friends.rows });
     } catch (error) {
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -50,6 +50,9 @@ router.get('/check', [
     const { friendId } = req.query;
 
     try {
+        if(userId == friendId) {
+            return res.json({ success: true, relation: 'self' });
+        }
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
