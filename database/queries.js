@@ -60,9 +60,7 @@ const deleteUser = async (userId) => {
     } catch (error) {
         await db.query('ROLLBACK');
         throw error;
-    } finally {
-      db.release();
-  }
+    }
 }
 
 const retrieveUserId = async (email) => {
