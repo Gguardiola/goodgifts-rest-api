@@ -30,7 +30,7 @@ router.get('/getAll',[
         let wishlists = await db.retrieveUserWishlists(requestedUser, limit, offset);
         
         if (!wishlists.rows.length > 0) {
-          return res.status(404).json({ success: false, message: 'Wishlists not found' });
+            return res.json({ success: true, wishlists: [] });
         }
         
         wishlists = wishlists.rows;
