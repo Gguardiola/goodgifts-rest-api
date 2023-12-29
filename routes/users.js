@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { validationResult, param, query, oneOf, body } = require('express-validator');
+const bcrypt = require("bcrypt");
 const checkAuth = require('../middleware/checkAuth');
+const requestLimiter = require('../middleware/requestLimiter');
 const db = require('../database/queries')
 
 // GET /users/getId/:fromEmail
@@ -74,7 +76,7 @@ router.get('/profile',[
 });
 
 // PATCH /users/profile/update
-router.patch('/profile/update',[
+router.patch('/profile/update', requestLimiter,[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     oneOf([
         body('email').isLength({ min: 1 }).withMessage('At least one field is required'),
@@ -118,9 +120,10 @@ router.patch('/profile/update',[
 });
 
 // DELETE /users/profile/delete
-router.delete('/profile/delete',[
+router.delete('/profile/delete', requestLimiter,[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 ], checkAuth, async (req, res) => {
+
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         console.log("Error validating input: "+errors.array());
@@ -128,10 +131,11 @@ router.delete('/profile/delete',[
     }
 
     try {
+        const token = req.headers.authorization;
         const userId = req.userId;
         const requestedUser = req.body.userId;
         if(userId == requestedUser) {
-            await db.deleteUser(userId);
+            await db.deleteUser(userId, token);
             res.json({ success: true, message: 'User profile deleted successfully' });
         }
         else {
@@ -143,8 +147,8 @@ router.delete('/profile/delete',[
     }
 });
 
-// POST /users/profile/changePassword
-router.post('/profile/changePassword',[
+// PATCH /users/profile/changePassword
+router.patch('/profile/changePassword',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('password').isLength({ min: 6 }).withMessage('Invalid password'),
     body('newPassword').isLength({ min: 6 }).withMessage('Invalid newPassword')

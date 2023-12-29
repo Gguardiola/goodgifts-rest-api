@@ -36,7 +36,7 @@ const updateUserPassword = async (userId, hashedPassword) => {
   await db.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
 }
 
-const deleteUser = async (userId) => {
+const deleteUser = async (userId, token) => {
   try {
     await db.query('BEGIN');
          // Delete related records in user_sessions
@@ -52,7 +52,8 @@ const deleteUser = async (userId) => {
  
          // Delete related records in user_gifts
          await db.query('DELETE FROM user_gifts WHERE user_id = $1', [userId]);
- 
+
+         await db.query('INSERT INTO token_blacklist (token) VALUES ($1)', [token]);
          // Delete the user
          await db.query('DELETE FROM users WHERE id = $1', [userId]);
  
