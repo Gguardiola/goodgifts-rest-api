@@ -103,6 +103,7 @@ router.patch('/profile/update',[
             if (Object.keys(filteredUpdateFields).length === 0) {
             return res.status(400).json({ success: false, message: 'At least one field is required' });
             }
+            console.log('Updating user profile with the following fields:', filteredUpdateFields);
             await db.updateUserProfile(userId, filteredUpdateFields);
 
             res.json({ success: true, message: 'User profile updated successfully' });
