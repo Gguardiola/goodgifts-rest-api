@@ -17,14 +17,19 @@ const retrievePublicUserProfile = async (userId) => {
 
 const updateUserProfile = async (userId, updateFields) => {
   const {email, username, lastname, bioDesc, birthday, image_name } = updateFields;
-  const values = [email, username, lastname, bioDesc, birthday, image_name, userId];
-  const setClause = Object.keys(updateFields)
-    .map((field, index) => `${field} = $${index + 1}`)
-    .join(', ');
-  console.log("setClause: "+setClause)
-  console.log("values: "+values)
-  
-  await db.query(`UPDATE users SET ${setClause} WHERE id = $${values.length}`, values);
+
+  const setClause = Object.entries(updateFields)
+      .map(([key, value]) => `${key} = $${Object.keys(updateFields).indexOf(key) + 1}`)
+      .join(', ');
+
+  const values = Object.values(updateFields);
+  const query = `UPDATE users SET ${setClause} WHERE id = $${values.length + 1} `;
+
+  try {
+      await db.query(query, [...values, userId]);
+  } catch (error) {
+      throw new Error(`Error updating user profile: ${error.message}`);
+  }
 };
 
 const updateUserPassword = async (userId, hashedPassword) => {
