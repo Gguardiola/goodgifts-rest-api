@@ -21,6 +21,9 @@ const updateUserProfile = async (userId, updateFields) => {
   const setClause = Object.keys(updateFields)
     .map((field, index) => `${field} = $${index + 1}`)
     .join(', ');
+  console.log("setClause: "+setClause)
+  console.log("values: "+values)
+  
   await db.query(`UPDATE users SET ${setClause} WHERE id = $${values.length}`, values);
 };
 
