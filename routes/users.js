@@ -76,5 +76,118 @@ router.get('/profile',[
       }
 });
 
+// PATCH /users/profile/update
+//headers: {Authorization: Bearer token}
+// body: {username, lastname, bioDesc, birthday, image_name}
+
+// DELETE /users/profile/delete
+//headers: {Authorization: Bearer token}
+// body: {password}
+
+////// FRIENDS //////
+
+//PAGINATION!
+// GET /friends/getAll/:userId
+//headers: {Authorization: Bearer token}
+//NOTE: must be the same user that is logged in
+
+// POST /friends/add
+//headers: {Authorization: Bearer token}
+// body: {userId} -> from the request
+
+// DELETE /friends/delete
+//headers: {Authorization: Bearer token}
+// body: {userId} -> from the request
+
+//PAGINATION!
+// GET /friends/requests/:userId
+//headers: {Authorization: Bearer token}
+
+// POST /friends/requests/accept
+//headers: {Authorization: Bearer token}
+// body: {userId} -> from the request
+
+// DELETE /friends/requests/reject
+//headers: {Authorization: Bearer token}
+// body: {userId} -> from the request
+
+////// WISHLISTS //////
+
+//PAGINATION!
+// GET /wishlists/getAll/:userId
+//headers: {Authorization: Bearer token}
+
+// POST /wishlists/create
+//headers: {Authorization: Bearer token}
+// body: {wishlistName}
+
+// DELETE /wishlists/delete
+//headers: {Authorization: Bearer token}
+// body: {userId, wishlistName}
+
+// PATCH /wishlists/edit
+//headers: {Authorization: Bearer token}
+// body: {userId, wishlistName, newName}
+
+////// ITEMS //////
+
+//PAGINATION!
+// GET /items/getAll/:userId/:wishlistName
+//headers: {Authorization: Bearer token}
+
+//GET /items/get/:itemId/:userId
+//headers: {Authorization: Bearer token}
+
+// POST /items/add
+//headers: {Authorization: Bearer token}
+// body: {userId, wishlistName, itemName, itemDescription, itemPrice, itemLink, image_name}
+
+// DELETE /items/delete
+//headers: {Authorization: Bearer token}
+// body: {userId, wishlistName, itemName}
+
+// PATCH /items/edit
+//headers: {Authorization: Bearer token}
+// body: {userId, wishlistName, itemName, newName, itemDescription, itemPrice, itemLink, image_name}
+
+///// GIFTS /////
+
+//PAGINATION!
+//GET /gifts/getAll/:userId/:state
+//headers: {Authorization: Bearer token}
+
+//GET /gifts/get/:giftName
+//headers: {Authorization: Bearer token}
+
+// POST /gifts/create
+//headers: {Authorization: Bearer token}
+// body: {userId -> gifted, wishlistName, itemName, itemDescription, itemPrice, itemLink, image_name}
+
+// DELETE /gifts/delete
+//headers: {Authorization: Bearer token}
+// body: {userId -> logged, gift_id}
+
+// PATCH /gifts/edit
+//headers: {Authorization: Bearer token}
+// body: {userId -> logged, gift_id, itemName, itemDescription, itemPrice, itemLink, image_name}
+
+// GET /gifts/getImplicationRequests/:giftId
+//headers: {Authorization: Bearer token}
+
+// POST /gifts/implication/accept
+//headers: {Authorization: Bearer token}
+// body: {userId, gift_id}
+
+// DELETE /gifts/implication/reject
+//headers: {Authorization: Bearer token}
+// body: {userId, gift_id}
+
+// GET /gifts/getImplications/:giftId
+
+// POST /gifts/complete
+//headers: {Authorization: Bearer token}
+// body: {userId -> logged, gift_id}
+
+
 
 module.exports = router;
