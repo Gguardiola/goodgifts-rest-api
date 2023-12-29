@@ -40,6 +40,7 @@ router.get('/check', [
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),
 ], checkAuth, async (req, res) => {
+
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -56,12 +57,12 @@ router.get('/check', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'Invalid userId' });
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
         const friend = await dbUsers.checkIfUserExists(friendId);
         if (friend.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'Invalid friendId' });
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
         const friendship = await db.checkIfFriendshipExists(userId, friendId);
         const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
@@ -100,7 +101,11 @@ router.post('/add', [
         const { friendId } = req.body;
     try {
         if(userId == requestedUser) {
-
+            
+            if(userId == friendId) {
+                console.log("Error: You cannot add yourself as a friend");
+                return res.status(400).json({ success: false, message: 'You cannot add yourself as a friend' });
+            }
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
@@ -153,7 +158,10 @@ router.delete('/delete', [
         const { friendId } = req.body;
     try {
         if(userId == requestedUser) {
-
+            if(userId == friendId) {
+                console.log("Error: You cannot delete yourself as a friend");
+                return res.status(400).json({ success: false, message: 'You cannot delete yourself as a friend' });
+            }
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
@@ -210,7 +218,7 @@ router.get('/requests', [
             return res.json({ success: true, requests: requests });
         }
 
-        res.json({ success: true, requests: requests });
+        res.json({ success: true, requests: requests.rows });
     } catch (error) {
         console.error('Error during friend requests retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -234,7 +242,10 @@ router.post('/requests/accept', [
         const { friendId } = req.body;
     try {
         if(userId == requestedUser) {
-
+            if(userId == friendId) {
+                console.log("Error: You cannot add yourself as a friend");
+                return res.status(400).json({ success: false, message: 'You cannot add yourself as a friend' });
+            }
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
@@ -282,7 +293,10 @@ router.delete('/requests/reject', [
         const { friendId } = req.body;
     try {
         if(userId == requestedUser) {
-
+            if(userId == friendId) {
+                console.log("Error: You cannot reject yourself as a friend");
+                return res.status(400).json({ success: false, message: 'You cannot reject yourself as a friend' });
+            }
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
