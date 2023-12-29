@@ -4,6 +4,7 @@ const checkAuth = require('../middleware/checkAuth');
 const requestLimiter = require('../middleware/requestLimiter');
 const db = require('../database/wishlists')
 const dbUsers = require('../database/users')
+const decodeString = require('../utils/decodeString');
 
 // GET /wishlists/getAll?userId=...&limit=...&offset=...
 router.get('/getAll',[
@@ -56,7 +57,7 @@ router.get('/get',[
 
     try {
         const requestedUser = req.query.userId;
-        const wishlistName =  decodeURIComponent(req.query.wishlistName);
+        const wishlistName =  decodeString(req.query.wishlistName);
         let user = await dbUsers.checkIfUserExists(requestedUser);
         if(!user.rows.length > 0) {
             console.log("Error: User NOT exists");
