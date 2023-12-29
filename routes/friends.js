@@ -25,7 +25,7 @@ router.get('/getAll', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'Invalid userId' });
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
         const friends = await db.retrieveFriends(userId, limit, offset);
         res.json({ success: true, friends: friends.rows });
@@ -47,8 +47,8 @@ router.get('/check', [
         console.log("Error validating input: " + errors.array());
         return res.status(400).json({ success: false, message: errors.array() });
     }
-    const userId = req.userId;
-    const { friendId } = req.query;
+
+    const { userId, friendId } = req.query;
 
     try {
         if(userId == friendId) {
@@ -66,7 +66,10 @@ router.get('/check', [
         }
         const friendship = await db.checkIfFriendshipExists(userId, friendId);
         const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
-        if (friendship.rows.length > 0 || friendshipBack.rows.length > 0) {
+        if (friendship.rows.length > 0) {
+            return res.json({ success: true, relation: 'friends' });
+        }
+        if (friendshipBack.rows.length > 0) {
             return res.json({ success: true, relation: 'friends' });
         }
         const friendshipRequest = await db.checkIfFriendshipRequestExists(userId, friendId);
@@ -118,13 +121,21 @@ router.post('/add', [
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(userId, friendId);
             const friendshipRequestBack = await db.checkIfFriendshipRequestExists(friendId, userId);
-            if (friendshipRequest.rows.length > 0 || friendshipRequestBack.rows.length > 0) {
+            if (friendshipRequest.rows.length > 0) {
+                console.log("Error: Friendship request already exists");
+                return res.status(400).json({ success: false, message: 'Friendship request already exists' });
+            }
+            if (friendshipRequestBack.rows.length > 0) {
                 console.log("Error: Friendship request already exists");
                 return res.status(400).json({ success: false, message: 'Friendship request already exists' });
             }
             const friendship = await db.checkIfFriendshipExists(userId, friendId);
             const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
-            if (friendship.rows.length > 0 || friendshipBack.rows.length > 0) {
+            if (friendship.rows.length > 0) {
+                console.log("Error: Friendship already exists");
+                return res.status(400).json({ success: false, message: 'Friendship already exists' });
+            }
+            if (friendshipBack.rows.length > 0) {
                 console.log("Error: Friendship already exists");
                 return res.status(400).json({ success: false, message: 'Friendship already exists' });
             }
@@ -174,7 +185,11 @@ router.delete('/delete', [
             }
             const friendship = await db.checkIfFriendshipExists(userId, friendId);
             const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
-            if (friendship.rows.length === 0 || friendshipBack.rows.length === 0) {
+            if (friendship.rows.length === 0) {
+                console.log("Error: Friendship does not exist");
+                return res.status(400).json({ success: false, message: 'Friendship does not exist' });
+            }
+            if (friendshipBack.rows.length === 0) {
                 console.log("Error: Friendship does not exist");
                 return res.status(400).json({ success: false, message: 'Friendship does not exist' });
             }
@@ -246,12 +261,12 @@ router.post('/requests/accept', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid userId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid friendId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(friendId, userId);
             if (friendshipRequest.rows.length === 0) {
@@ -297,12 +312,12 @@ router.delete('/requests/reject', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid userId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid friendId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(friendId, userId);
             if (friendshipRequest.rows.length === 0) {
