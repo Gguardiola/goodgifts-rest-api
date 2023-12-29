@@ -25,7 +25,7 @@ router.get('/getAll', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const friends = await db.retrieveFriends(userId, limit, offset);
         res.json({ success: true, friends: friends.rows });
@@ -57,12 +57,12 @@ router.get('/check', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const friend = await dbUsers.checkIfUserExists(friendId);
         if (friend.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const friendship = await db.checkIfFriendshipExists(userId, friendId);
         const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
@@ -112,12 +112,12 @@ router.post('/add', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(userId, friendId);
             const friendshipRequestBack = await db.checkIfFriendshipRequestExists(friendId, userId);
@@ -176,18 +176,18 @@ router.delete('/delete', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friendship = await db.checkIfFriendshipExists(userId, friendId);
             const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
             if (friendship.rows.length === 0 && friendshipBack.rows.length === 0) {
                 console.log("Error: Friendship does not exist");
-                return res.status(400).json({ success: false, message: 'Friendship does not exist' });
+                return res.status(404).json({ success: false, message: 'Friendship does not exist' });
             }
 
             await db.deleteFriend(userId, friendId);
@@ -223,7 +223,7 @@ router.get('/requests', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         const requests = await db.retrieveRequests(userId, limit, offset);
 
@@ -258,17 +258,17 @@ router.post('/requests/accept', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(friendId, userId);
             if (friendshipRequest.rows.length === 0) {
                 console.log("Error: Friendship request does not exist");
-                return res.status(400).json({ success: false, message: 'Friendship request does not exist' });
+                return res.status(404).json({ success: false, message: 'Friendship request does not exist' });
             }
             await db.acceptFriendRequest(friendId, userId);
             res.json({ success: true, message: 'Friendship added' });
@@ -309,17 +309,17 @@ router.delete('/requests/reject', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'User not found' });
+                return res.status(404).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(friendId, userId);
             if (friendshipRequest.rows.length === 0) {
                 console.log("Error: Friendship request does not exist");
-                return res.status(400).json({ success: false, message: 'Friendship request does not exist' });
+                return res.status(404).json({ success: false, message: 'Friendship request does not exist' });
             }
             await db.deleteFriend(friendId, userId);
             res.json({ success: true, message: 'Friendship request deleted' });
@@ -333,84 +333,6 @@ router.delete('/requests/reject', [
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
-
-////// WISHLISTS //////
-
-//PAGINATION!
-// GET /wishlists/getAll/:userId
-//headers: {Authorization: Bearer token}
-
-// POST /wishlists/create
-//headers: {Authorization: Bearer token}
-// body: {wishlistName}
-
-// DELETE /wishlists/delete
-//headers: {Authorization: Bearer token}
-// body: {userId, wishlistName}
-
-// PATCH /wishlists/edit
-//headers: {Authorization: Bearer token}
-// body: {userId, wishlistName, newName}
-
-////// ITEMS //////
-
-//PAGINATION!
-// GET /items/getAll/:userId/:wishlistName
-//headers: {Authorization: Bearer token}
-
-//GET /items/get/:itemId/:userId
-//headers: {Authorization: Bearer token}
-
-// POST /items/add
-//headers: {Authorization: Bearer token}
-// body: {userId, wishlistName, itemName, itemDescription, itemPrice, itemLink, image_name}
-
-// DELETE /items/delete
-//headers: {Authorization: Bearer token}
-// body: {userId, wishlistName, itemName}
-
-// PATCH /items/edit
-//headers: {Authorization: Bearer token}
-// body: {userId, wishlistName, itemName, newName, itemDescription, itemPrice, itemLink, image_name}
-
-///// GIFTS /////
-
-//PAGINATION!
-//GET /gifts/getAll/:userId/:state
-//headers: {Authorization: Bearer token}
-
-//GET /gifts/get/:giftName
-//headers: {Authorization: Bearer token}
-
-// POST /gifts/create
-//headers: {Authorization: Bearer token}
-// body: {userId -> gifted, wishlistName, itemName, itemDescription, itemPrice, itemLink, image_name}
-
-// DELETE /gifts/delete
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id}
-
-// PATCH /gifts/edit
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id, itemName, itemDescription, itemPrice, itemLink, image_name}
-
-// GET /gifts/getImplicationRequests/:giftId
-//headers: {Authorization: Bearer token}
-
-// POST /gifts/implication/accept
-//headers: {Authorization: Bearer token}
-// body: {userId, gift_id}
-
-// DELETE /gifts/implication/reject
-//headers: {Authorization: Bearer token}
-// body: {userId, gift_id}
-
-// GET /gifts/getImplications/:giftId
-
-// POST /gifts/complete
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id}
-
 
 
 module.exports = router;

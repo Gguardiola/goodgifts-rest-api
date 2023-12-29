@@ -1,10 +1,5 @@
 const db = require('./db');
 
-const checkIfUserExists = async (userId) => {
-  const result = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
-  return result;
-};
-
 const retrieveFriends = async (userId, limit, offset) => {
   const result = await db.query('SELECT * FROM friends WHERE user_id = $1 AND is_friend = true LIMIT $2 OFFSET $3', [userId, limit, offset]);
   return result;
@@ -38,7 +33,6 @@ const acceptFriendRequest = async (userId, friendId) => {
 };
 
 module.exports = {
-  checkIfUserExists,
   retrieveFriends,
   checkIfFriendshipExists,
   checkIfFriendshipRequestExists,
