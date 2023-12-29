@@ -98,7 +98,7 @@ router.post('/create',[
 
     try {
         const userId = req.userId;
-        const wishlistName = req.body;
+        const wishlistName = req.body.wishlistName;
         const requestedUser = req.body.userId;
         if (userId == requestedUser) {
             let wishlist = await db.retrieveWishlist(userId, wishlistName);
