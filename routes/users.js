@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { validationResult, param, query } = require('express-validator');
+const { validationResult, param, query, oneOf, body } = require('express-validator');
 const checkAuth = require('../middleware/checkAuth');
 const db = require('../database/queries')
 
@@ -47,7 +47,6 @@ router.get('/profile',[
         const userId = req.userId;
         const requestedUser = req.query.userId;
 
-        // check if the user is requesting his own profile, if so, return his profile
         if (userId == requestedUser) {
             let userProfile = await db.retrieveUserProfile(userId);
         
@@ -67,9 +66,7 @@ router.get('/profile',[
         let userProfile = await db.retrievePublicUserProfile(requestedUser);
         userProfile = userProfile.rows[0];
 
-        res.json({ success: true, userProfile });
-        
-
+        res.json({ success: true, userProfile });  
       } catch (error) {
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -77,12 +74,114 @@ router.get('/profile',[
 });
 
 // PATCH /users/profile/update
-//headers: {Authorization: Bearer token}
-// body: {username, lastname, bioDesc, birthday, image_name}
+router.patch('/profile/update',[
+    body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
+    oneOf([
+        body('email').isLength({ min: 1 }).withMessage('At least one field is required'),
+        body('username').isLength({ min: 1 }).withMessage('At least one field is required'),
+        body('lastname').isLength({ min: 1 }).withMessage('At least one field is required'),
+        body('bioDesc').isLength({ min: 1 }).withMessage('At least one field is required'),
+        body('birthday').isLength({ min: 1 }).isISO8601().toDate().withMessage('At least one field is required'),
+        body('image_name').isLength({ min: 1 }).withMessage('At least one field is required'),
+      ])
+], checkAuth, async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array());
+        return res.status(400).json({success: false, message: errors.array()});
+    }
+
+    try {
+        const userId = req.userId;
+        const requestedUser = req.query.userId;
+        const {email, username, lastname, bioDesc, birthday, image_name } = req.body;
+        if(userId == requestedUser) {
+            const updateFields = {email, username, lastname, bioDesc, birthday, image_name };
+            const filteredUpdateFields = Object.fromEntries(
+            Object.entries(updateFields).filter(([key, value]) => value !== undefined)
+            )
+            if (Object.keys(filteredUpdateFields).length === 0) {
+            return res.status(400).json({ success: false, message: 'At least one field is required' });
+            }
+            await db.updateUserProfile(userId, filteredUpdateFields);
+
+            res.json({ success: true, message: 'User profile updated successfully' });
+        }
+        else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+      }
+});
 
 // DELETE /users/profile/delete
-//headers: {Authorization: Bearer token}
-// body: {password}
+router.delete('/profile/delete',[
+    body('userId').isLength({ min: 1 }).withMessage('Invalid userId')
+], checkAuth, async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array());
+        return res.status(400).json({success: false, message: errors.array()});
+    }
+
+    try {
+        const userId = req.userId;
+        const requestedUser = req.query.userId;
+        if(userId == requestedUser) {
+            await db.deleteUser(userId);
+            res.json({ success: true, message: 'User profile deleted successfully' });
+        }
+        else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+    } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// POST /users/profile/changePassword
+router.post('/profile/changePassword',[
+    body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
+    body('password').isLength({ min: 6 }).withMessage('Invalid password'),
+    body('newPassword').isLength({ min: 6 }).withMessage('Invalid newPassword')
+], checkAuth, async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array());
+        return res.status(400).json({success: false, message: errors.array()});
+    }   
+
+    try {
+        const userId = req.userId;
+        const requestedUser = req.query.userId;
+        const {password, newPassword} = req.body;
+        if(userId == requestedUser){
+            let user = await db.retrieveUserProfile(userId);
+            if (!user.rows.length > 0) {
+                return res.status(404).json({ success: false, message: 'User profile not found' });
+            }
+            user = user.rows[0];
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if(!isPasswordValid) {
+                return res.status(400).json({ success: false, message: 'Invalid credentials' });
+            }
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await db.updateUserPassword(userId, hashedPassword);
+            res.json({ success: true, message: 'Password updated successfully' });
+        }
+        else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+    }
+    catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 
 ////// FRIENDS //////
 
