@@ -3,7 +3,7 @@ const { validationResult, param, query } = require('express-validator');
 const checkAuth = require('../middleware/checkAuth');
 const db = require('../database/queries')
 
-// GET /users/getId/:requestedUser
+// GET /users/getId/:fromEmail
 router.get('/getId',[
     query('fromEmail').isLength({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
 
@@ -22,11 +22,8 @@ router.get('/getId',[
         if (!userId.rows.length > 0) {
             return res.status(404).json({ success: false, message: 'UserId not found' });
         }
-
-        userId = userId.rows[0];
-        
-        res.json({ success: true, userId: userId.id });
-        
+        userId = userId.rows[0];       
+        res.json({ success: true, userId: userId.id });    
 
       } catch (error) {
         console.error('Error:', error.message);
@@ -34,7 +31,7 @@ router.get('/getId',[
       }
 });
 
-// GET /users/profile/:requestedUser
+// GET /users/profile/:userId
 router.get('/profile',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 
@@ -59,10 +56,8 @@ router.get('/profile',[
             }
             
             userProfile = userProfile.rows[0];
-
             return res.json({ success: true, userProfile });
         }
-
         //check if the user is requesting exists   
         const userExists = await db.checkIfUserExists(requestedUser);
         if (!userExists.rows.length > 0) {
