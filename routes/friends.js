@@ -128,7 +128,7 @@ router.post('/add', [
                 console.log("Error: Friendship already exists");
                 return res.status(400).json({ success: false, message: 'Friendship already exists' });
             }
-            await db.addFriend(userId, requestedUser);
+            await db.addFriend(userId, friendId);
             res.json({ success: true, message: 'Friendship added' });
         }
         else {
@@ -211,12 +211,9 @@ router.get('/requests', [
         const user = await dbUsers.checkIfUserExists(userId);
         if (user.rows.length === 0) {
             console.log("Error: User NOT exists");
-            return res.status(400).json({ success: false, message: 'Invalid userId' });
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
         const requests = await db.retrieveRequests(userId, limit, offset);
-        if(requests.rows.length === 0) {    
-            return res.json({ success: true, requests: requests });
-        }
 
         res.json({ success: true, requests: requests.rows });
     } catch (error) {
