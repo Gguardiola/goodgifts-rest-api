@@ -56,7 +56,7 @@ router.get('/get',[
 
     try {
         const requestedUser = req.query.userId;
-        const wishlistName = req.query.wishlistName;
+        const wishlistName =  decodeURIComponent(req.query.wishlistName);
         let user = await dbUsers.checkIfUserExists(requestedUser);
         if(!user.rows.length > 0) {
             console.log("Error: User NOT exists");
@@ -88,7 +88,7 @@ router.post('/create',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('wishlistName').isLength({ min: 5 }).isString().withMessage('Invalid wishlistName')
 
-], checkAuth, async (req, res) => {
+], requestLimiter, checkAuth, async (req, res) => {
 
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -123,7 +123,7 @@ router.delete('/delete',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('wishlistName').isLength({ min: 5 }).isString().withMessage('Invalid wishlistName')
 
-], checkAuth, async (req, res) => {
+], requestLimiter, checkAuth, async (req, res) => {
     
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -159,7 +159,7 @@ router.patch('/edit',[
     body('wishlistName').isLength({ min: 5 }).isString().withMessage('Invalid wishlistName'),
     body('newName').isLength({ min: 5 }).isString().withMessage('Invalid newName')
 
-], checkAuth, async (req, res) => {
+], requestLimiter, checkAuth, async (req, res) => {
     
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
