@@ -20,7 +20,7 @@ router.get('/getId',[
 
         let userId = await db.retrieveUserId(requestedUser);
         if (!userId.rows.length > 0) {
-            return res.status(404).json({ success: false, message: 'UserId not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
         userId = userId.rows[0];       
         res.json({ success: true, userId: userId.id });    
@@ -93,7 +93,7 @@ router.patch('/profile/update',[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.query.userId;
+        const requestedUser = req.body.userId;
         const {email, username, lastname, bioDesc, birthday, image_name } = req.body;
         if(userId == requestedUser) {
             const updateFields = {email, username, lastname, bioDesc, birthday, image_name };
@@ -128,7 +128,7 @@ router.delete('/profile/delete',[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.query.userId;
+        const requestedUser = req.body.userId;
         if(userId == requestedUser) {
             await db.deleteUser(userId);
             res.json({ success: true, message: 'User profile deleted successfully' });
@@ -157,7 +157,7 @@ router.post('/profile/changePassword',[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.query.userId;
+        const requestedUser = req.body.userId;
         const {password, newPassword} = req.body;
         if(userId == requestedUser){
             let user = await db.retrieveUserProfile(userId);
