@@ -39,34 +39,30 @@ const updateUserPassword = async (userId, hashedPassword) => {
 const deleteUser = async (userId) => {
   try {
     await db.query('BEGIN');
-        // Delete related records in user_sessions
-        await db.query('DELETE FROM user_sessions WHERE user_id = $1', [userId]);
+         // Delete related records in user_sessions
+         await db.query('DELETE FROM user_sessions WHERE user_id = $1', [userId]);
 
-        // Delete related records in friends
-        await db.query('DELETE FROM friends WHERE user_id = $1 OR friend_id = $1', [userId]);
-
-        // Delete related records in wishlists, items, and gifts
-        await db.query(`
-            DELETE FROM gifts
-            WHERE id IN (SELECT g.id FROM gifts g JOIN items i ON g.item_id = i.id WHERE i.wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1));
-
-            DELETE FROM items
-            WHERE wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1);
-
-            DELETE FROM wishlists WHERE user_id = $1;
-        `, [userId]);
-
-        // Delete related records in user_gifts
-        await db.query('DELETE FROM user_gifts WHERE user_id = $1', [userId]);
-
-        // Delete the user
-        await db.query('DELETE FROM users WHERE id = $1', [userId]);
-
-    await db.query('COMMIT');
+         // Delete related records in friends
+         await db.query('DELETE FROM friends WHERE user_id = $1 OR friend_id = $1', [userId]);
+ 
+         // Delete related records in wishlists, items, and gifts
+         await db.query('DELETE FROM gifts WHERE id IN (SELECT g.id FROM gifts g JOIN items i ON g.item_id = i.id WHERE i.wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1))', [userId]);
+         await db.query('DELETE FROM items WHERE wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1)', [userId]);
+         await db.query('DELETE FROM wishlists WHERE user_id = $1', [userId]);
+ 
+         // Delete related records in user_gifts
+         await db.query('DELETE FROM user_gifts WHERE user_id = $1', [userId]);
+ 
+         // Delete the user
+         await db.query('DELETE FROM users WHERE id = $1', [userId]);
+ 
+        await db.query('COMMIT');
     } catch (error) {
         await db.query('ROLLBACK');
         throw error;
-    }
+    } finally {
+      db.release();
+  }
 }
 
 const retrieveUserId = async (email) => {
