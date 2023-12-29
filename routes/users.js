@@ -3,9 +3,9 @@ const { validationResult, param, query, oneOf, body } = require('express-validat
 const bcrypt = require("bcrypt");
 const checkAuth = require('../middleware/checkAuth');
 const requestLimiter = require('../middleware/requestLimiter');
-const db = require('../database/queries')
+const db = require('../database/users')
 
-// GET /users/getId/:fromEmail
+// GET /users/getId?fromEmail
 router.get('/getId',[
     query('fromEmail').isLength({ min: 1 }).isEmail().withMessage('Invalid fromEmail')
 
@@ -33,7 +33,7 @@ router.get('/getId',[
       }
 });
 
-// GET /users/profile/:userId
+// GET /users/profile?userId
 router.get('/profile',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 
