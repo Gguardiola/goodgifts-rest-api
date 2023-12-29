@@ -112,12 +112,12 @@ router.post('/add', [
             const user = await dbUsers.checkIfUserExists(userId);
             if (user.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid userId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friend = await dbUsers.checkIfUserExists(friendId);
             if (friend.rows.length === 0) {
                 console.log("Error: User NOT exists");
-                return res.status(400).json({ success: false, message: 'Invalid friendId' });
+                return res.status(400).json({ success: false, message: 'User not found' });
             }
             const friendshipRequest = await db.checkIfFriendshipRequestExists(userId, friendId);
             const friendshipRequestBack = await db.checkIfFriendshipRequestExists(friendId, userId);
@@ -189,7 +189,7 @@ router.delete('/delete', [
                 console.log("Error: Friendship does not exist");
                 return res.status(400).json({ success: false, message: 'Friendship does not exist' });
             }
-            
+
             await db.deleteFriend(userId, friendId);
             await db.deleteFriend(friendId, userId);
             res.json({ success: true, message: 'Friendship deleted' });
