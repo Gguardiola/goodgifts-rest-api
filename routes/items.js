@@ -90,9 +90,9 @@ router.get('/get',[
 // POST /items/create
 router.post('/create',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
-    body('itemDescription').isLength({ min: 1 }).withMessage('Invalid itemDescription'),
-    body('itemLink').isLength({ min: 1 }).withMessage('Invalid itemLink'),
+    body('item_name').isLength({ min: 1 }).withMessage('Invalid item_name'),
+    body('item_description').isLength({ min: 1 }).withMessage('Invalid item_description'),
+    body('item_url').isLength({ min: 1 }).withMessage('Invalid item_url'),
     body('image_name').isLength({ min: 1 }).withMessage('Invalid image_name'),
 ], checkAuth, async (req, res) => {
 
@@ -105,15 +105,15 @@ router.post('/create',[
     try {
         const userId = req.userId;
         const requestedUser = req.body.userId;
-        const { itemName, itemDescription, itemLink, image_name } = req.body;
+        const { item_name, item_description, item_url, image_name } = req.body;
         
         if (userId == requestedUser) {
 
-            let item = await db.retrieveUserItem(requestedUser, itemName);
+            let item = await db.retrieveUserItem(requestedUser, item_name);
             if (item.rows.length > 0) {
                 return res.status(409).json({ success: false, message: 'Item already exists' });
             }
-            await db.createItem(requestedUser, itemName, itemDescription, itemLink, image_name);
+            await db.createItem(requestedUser, item_name, item_description, item_url, image_name);
             return res.json({ success: true, message: 'Item created' });
 
         }
@@ -133,7 +133,7 @@ router.post('/create',[
 // DELETE /items/delete
 router.delete('/delete',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
+    body('item_name').isLength({ min: 1 }).withMessage('Invalid item name'),
 ], checkAuth, async (req, res) => {
 
     const errors = validationResult(req);
@@ -145,10 +145,10 @@ router.delete('/delete',[
     try {
         const userId = req.userId;
         const requestedUser = req.body.userId;
-        const { itemName } = req.body;
+        const { item_name } = req.body;
 
         if (userId == requestedUser) {
-            let item = await db.retrieveUserItem(requestedUser, itemName);
+            let item = await db.retrieveUserItem(requestedUser, item_name);
             if (!item.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Item not found' });
             }
@@ -175,9 +175,9 @@ router.patch('/edit',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('itemId').isLength({ min: 1 }).withMessage('Invalid itemId'),
     oneOf([
-        body('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
-        body('itemDescription').isLength({ min: 1 }).withMessage('Invalid itemDescription'),
-        body('itemLink').isLength({ min: 1 }).withMessage('Invalid itemLink'),
+        body('item_name').isLength({ min: 1 }).withMessage('Invalid item_name'),
+        body('item_description').isLength({ min: 1 }).withMessage('Invalid item_description'),
+        body('item_url').isLength({ min: 1 }).withMessage('Invalid item_url'),
         body('image_name').isLength({ min: 1 }).withMessage('Invalid image_name'),
       ])
 ], checkAuth, async (req, res) => {
@@ -192,7 +192,7 @@ router.patch('/edit',[
         const userId = req.userId;
         const itemId = req.body.itemId;
         const requestedUser = req.body.userId;
-        const {itemName, itemDescription, itemLink, image_name} = req.body;
+        const {item_name, item_description, item_url, image_name} = req.body;
 
         if(userId == requestedUser) {
             
@@ -201,7 +201,7 @@ router.patch('/edit',[
                 return res.status(404).json({ success: false, message: 'Item not found' });
             }
             
-            const editFields = { itemName, itemDescription, itemLink, image_name };
+            const editFields = { item_name, item_description, item_url, image_name};
             const filteredEditFields = Object.fromEntries(
             Object.entries(editFields).filter(([key, value]) => value !== undefined)
             )

@@ -17,9 +17,9 @@ const retrieveItemById = async (itemId) => {
   return result;
 }
 
-const createItem = async (userId, itemName, itemDescription, itemLink, image_name) => {
+const createItem = async (userId, item_name, item_description, item_url, image_name) => {
   userId = userId.replace(/^"|"$/g, '');
-  await db.query('INSERT INTO items (user_id, item_name, item_description, item_link, image_name) VALUES ($1, $2, $3, $4, $5)', [userId, itemName, itemDescription, itemLink, image_name]);
+  await db.query('INSERT INTO items (user_id, item_name, item_description, item_link, image_name) VALUES ($1, $2, $3, $4, $5)', [userId, item_name, item_description, item_url, image_name]);
 };
 
 const deleteItem = async(userId, itemId) => {
@@ -30,7 +30,7 @@ const deleteItem = async(userId, itemId) => {
 };
 
 const editItem = async (itemId, editFields) => {
-  const {itemName, itemDescription, itemLink, image_name} = editFields;
+  const {item_name, item_description, item_url, image_name} = editFields;
 
   const setClause = Object.entries(editFields)
       .map(([key, value]) => `${key} = $${Object.keys(editFields).indexOf(key) + 1}`)
