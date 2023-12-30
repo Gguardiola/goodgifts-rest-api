@@ -19,8 +19,8 @@ router.get('/getId',[
 
     try {
         const requestedUser = req.query.fromEmail;
-
         let userId = await db.retrieveUserId(requestedUser);
+
         if (!userId.rows.length > 0) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
@@ -70,6 +70,9 @@ router.get('/profile',[
 
         res.json({ success: true, userProfile });  
       } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
       }
@@ -95,7 +98,7 @@ router.patch('/profile/update', requestLimiter,[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.body.userId.replace(/^"|"$/g, '');
+        const requestedUser = req.body.userId;
         const {email, username, lastname, bioDesc, birthday, image_name } = req.body;
         if(userId == requestedUser) {
             const updateFields = {email, username, lastname, bioDesc, birthday, image_name };
