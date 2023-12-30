@@ -24,7 +24,6 @@ router.get('/getAll',[
 
     try {
         const requestedUser = req.query.userId;
-        const itemName = decodeURIComponent(req.query.itemName);
         const { limit, offset } = req.query;
         let user = await dbUsers.checkIfUserExists(requestedUser);
         if(!user.rows.length > 0) {
@@ -41,6 +40,9 @@ router.get('/getAll',[
         items = items.rows;
         return res.json({ success: true, items });
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -77,6 +79,9 @@ router.get('/get',[
         item = item.rows[0];
         return res.json({ success: true, item });
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -117,6 +122,9 @@ router.post('/create',[
         }
     }
     catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }   
@@ -154,6 +162,9 @@ router.delete('/delete',[
         }
     }
     catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -203,6 +214,9 @@ router.patch('/edit',[
             res.json({ success: true, message: 'Item edited successfully' });
         }
         else {
+            if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+                return res.status(400).json({ success: false, message: 'Invalid userId format' });
+            }
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
     } 
@@ -259,6 +273,9 @@ router.post('/addToWishlist',[
         }
     } 
     catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -310,6 +327,9 @@ router.delete('/deleteFromWishlist',[
         }
     } 
     catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }

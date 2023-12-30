@@ -35,7 +35,11 @@ router.get('/getAll',[
         
         wishlists = wishlists.rows;
         return res.json({ success: true, wishlists });
+
       } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
       }
@@ -78,8 +82,11 @@ router.get('/get',[
         return res.json({ success: true, wishlistName: wishlist.wishlist_name, createdAt: wishlist.created_at, items });
 
     } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
@@ -113,8 +120,11 @@ router.post('/create',[
         }
 
     } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
@@ -148,6 +158,9 @@ router.delete('/delete',[
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -185,6 +198,9 @@ router.patch('/edit',[
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }

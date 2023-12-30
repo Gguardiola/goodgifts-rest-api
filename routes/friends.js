@@ -30,6 +30,9 @@ router.get('/getAll', [
         const friends = await db.retrieveFriends(userId, limit, offset);
         res.json({ success: true, friends: friends.rows });
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -82,6 +85,9 @@ router.get('/check', [
         }
         return res.json({ success: true, relation: 'none' });
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -147,6 +153,9 @@ router.post('/add', [
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -199,6 +208,9 @@ router.delete('/delete', [
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -229,6 +241,9 @@ router.get('/requests', [
 
         res.json({ success: true, requests: requests.rows });
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friend requests retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     } 
@@ -278,6 +293,9 @@ router.post('/requests/accept', [
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -329,6 +347,9 @@ router.delete('/requests/reject', [
         }
 
     } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error during friends retrieval:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
