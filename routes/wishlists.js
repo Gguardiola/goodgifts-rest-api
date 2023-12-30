@@ -72,9 +72,9 @@ router.get('/get',[
         if (!wishlist.rows.length > 0) {
             return res.status(404).json({ success: false, message: 'Wishlist not found' });
         }
-        console.log("check 2")
         let items = await db.retrieveWishlistItems(requestedUser, wishlistName);
-
+        console.log("check 2")
+        
         if (!items.rows.length > 0) {
             return res.json({ success: true, wishlistName: wishlist.wishlist_name, createdAt: wishlist.created_at, items: [] });
         }
