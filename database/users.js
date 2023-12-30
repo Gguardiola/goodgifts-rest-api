@@ -47,7 +47,7 @@ const deleteUser = async (userId, token) => {
  
          // Delete related records in wishlists, items, and gifts
          await db.query('DELETE FROM gifts WHERE id IN (SELECT g.id FROM gifts g JOIN items i ON g.item_id = i.id WHERE i.wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1))', [userId]);
-         await db.query('DELETE FROM items WHERE wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1)', [userId]);
+         await db.query('DELETE FROM items WHERE user_id = $1', [userId]);
          await db.query('DELETE FROM wishlists WHERE user_id = $1', [userId]);
  
          // Delete related records in user_gifts

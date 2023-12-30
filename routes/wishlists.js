@@ -44,7 +44,7 @@ router.get('/getAll',[
 // GET /wishlists/get?userId=... &wishlistName=...
 router.get('/get',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    query('wishlistName').isLength({ min: 5 }).isString().withMessage('Invalid wishlistName')
+    query('wishlistName').isLength({ min: 5 }).withMessage('Invalid wishlistName')
 
 ], checkAuth, async (req, res) => {
 
@@ -193,7 +193,7 @@ router.patch('/edit',[
 
 
 ////// ITEMS //////
-
+//FIXME: delete cascade when deleting a wishlist! (must delete the items, gifts and implications)
 //PAGINATION!
 //GET /items/get?itemName=...&wishlistName=...&limit=...&offset=...
 //headers: {Authorization: Bearer token}
