@@ -252,19 +252,18 @@ router.post('/addToWishlist',[
                 return res.status(404).json({ success: false, message: 'Item not found' });
             }
             
-            wishlist = await dbWishlists.retrieveWishlist(userId, wishlistName);
+            let wishlist = await dbWishlists.retrieveWishlist(userId, wishlistName);
             if (!wishlist.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Wishlist not found' });
             }
-            wishlist = wishlist.rows[0];
-            const wishlistId = wishlist.id;
+            wishlist = wishlist.rows[0].id;
             // check if item aleready exists in wishlist
-            const itemExists = await db.checkIfItemExistsInWishlist(requestedUser, wishlistId, itemId);
+            const itemExists = await db.checkIfItemExistsInWishlist(requestedUser, wishlist, itemId);
             if (itemExists.rows.length > 0) {
                 return res.status(409).json({ success: false, message: 'Item already exists in wishlist' });
             }
 
-            await db.addItemToWishlist(requestedUser, wishlistId, itemId);
+            await db.addItemToWishlist(requestedUser, wishlist, itemId);
 
             res.json({ success: true, message: 'Item added to wishlist successfully' });
         }
