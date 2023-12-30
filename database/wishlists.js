@@ -15,7 +15,7 @@ const retrieveUserWishlists = async (userId, limit, offset) => {
 const retrieveWishlistItems = async (userId, wishlistName) => {
   userId = userId.replace(/^"|"$/g, '');
   const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
-  const result = await db.query('SELECT * FROM items WHERE id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = $2 )', [wishlist.rows[0].id]);
+  const result = await db.query('SELECT * FROM items WHERE id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = $1 )', [wishlist.rows[0].id]);
   return result;
 }
 
