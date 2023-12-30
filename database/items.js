@@ -58,16 +58,14 @@ const addItemToWishlist = async (userId, wishlistName, itemId) => {
   await db.query('INSERT INTO item_wishlists (item_id, wishlist_id) VALUES ($1, $2)', [itemId, wishlist.rows[0].id]);
 };
 
-const deleteItemFromWishlist = async (userId, wishlistName, itemId) => {
+const deleteItemFromWishlist = async (userId, wishlistId, itemId) => {
   userId = userId.replace(/^"|"$/g, '');
-  const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
-  await db.query('DELETE FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlist.rows[0].id]);
+  await db.query('DELETE FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlistId]);
 };
 
-const checkIfItemExistsInWishlist = async (userId, wishlistName, itemId) => {
+const checkIfItemExistsInWishlist = async (userId, wishlistId, itemId) => {
   userId = userId.replace(/^"|"$/g, '');
-  const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
-  const result = await db.query('SELECT * FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlist.rows[0].id]);
+  const result = await db.query('SELECT * FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlistId]);
   return result;
 }
 
