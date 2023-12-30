@@ -15,7 +15,7 @@ app.use('/auth', auth);
 app.use('/users', users);
 app.use('/friends', friends);
 app.use('/wishlists', wishlists);
-app.use('items', items);
+app.use('/items', items);
 
 app.listen(LISTEN_PORT, () => {
     console.log("Goodgifts REST API is running on port "+ LISTEN_PORT);
