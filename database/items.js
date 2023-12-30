@@ -1,11 +1,13 @@
 const db = require('./db');
 
 const retrieveUserItem = async (userId, itemName) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT * FROM items WHERE user_id = $1 AND item_name = $2', [userId, itemName]);
   return result;
 };
 
 const retrieveAllUserItems = async (userId, limit, offset) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT * FROM items WHERE user_id = $1 LIMIT $2 OFFSET $3', [userId, limit, offset]);
   return result;
 };
@@ -16,10 +18,12 @@ const retrieveItemById = async (itemId) => {
 }
 
 const createItem = async (userId, itemName, itemDescription, itemLink, image_name) => {
+  userId = userId.replace(/^"|"$/g, '');
   await db.query('INSERT INTO items (user_id, item_name, item_description, item_link, image_name) VALUES ($1, $2, $3, $4, $5)', [userId, itemName, itemDescription, itemLink, image_name]);
 };
 
 const deleteItem = async(userId, itemId) => {
+  userId = userId.replace(/^"|"$/g, '');
   await db.query('DELETE FROM gifts WHERE item_id = $1', [itemId]);
   await db.query('DELETE FROM item_wishlists WHERE item_id = $1', [itemId]);
   await db.query('DELETE FROM items WHERE user_id = $1 AND id = $2', [userId, itemId]); 
@@ -43,21 +47,25 @@ const editItem = async (itemId, editFields) => {
 };
 
 const isItemOwner = async (userId, itemId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT * FROM items WHERE id = $1 AND wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $2)', [itemId, userId]);
   return result;
 }
 
 const addItemToWishlist = async (userId, wishlistName, itemId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
   await db.query('INSERT INTO item_wishlists (item_id, wishlist_id) VALUES ($1, $2)', [itemId, wishlist.rows[0].id]);
 };
 
 const deleteItemFromWishlist = async (userId, wishlistName, itemId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
   await db.query('DELETE FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlist.rows[0].id]);
 };
 
 const checkIfItemExistsInWishlist = async (userId, wishlistName, itemId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const wishlist = await db.query('SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
   const result = await db.query('SELECT * FROM item_wishlists WHERE item_id = $1 AND wishlist_id = $2', [itemId, wishlist.rows[0].id]);
   return result;

@@ -1,21 +1,25 @@
 const db = require('./db');
 
 const checkIfUserExists = async (userId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
   return result;
 };
 
 const retrieveUserProfile = async (userId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
   return result;
 };
 
 const retrievePublicUserProfile = async (userId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT email, username, lastname, bioDesc, birthday, image_name FROM users WHERE id = $1', [userId]);
   return result;
 };
 
 const updateUserProfile = async (userId, updateFields) => {
+  userId = userId.replace(/^"|"$/g, '');
   const {email, username, lastname, bioDesc, birthday, image_name } = updateFields;
 
   const setClause = Object.entries(updateFields)
@@ -33,10 +37,12 @@ const updateUserProfile = async (userId, updateFields) => {
 };
 
 const updateUserPassword = async (userId, hashedPassword) => {
+  userId = userId.replace(/^"|"$/g, '');
   await db.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
 }
 
 const deleteUser = async (userId, token) => {
+  userId = userId.replace(/^"|"$/g, '');
   try {
     await db.query('BEGIN');
          // Delete related records in user_sessions
