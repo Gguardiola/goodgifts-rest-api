@@ -3,7 +3,13 @@ const db = require('./db');
 const retrieveUserItem = async (userId, itemName) => {
   const result = await db.query('SELECT * FROM items WHERE user_id = $1 AND item_name = $2', [userId, itemName]);
   return result;
-}
+};
+
+const retrieveAllUserItems = async (userId, limit, offset) => {
+  const result = await db.query('SELECT * FROM items WHERE user_id = $1 LIMIT $2 OFFSET $3', [userId, limit, offset]);
+  return result;
+};
+
 const retrieveItemById = async (itemId) => { 
   const result = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
   return result;
@@ -57,8 +63,10 @@ const checkIfItemExistsInWishlist = async (userId, wishlistName, itemId) => {
   return result;
 }
 
+
 module.exports = {
   retrieveUserItem,
+  retrieveAllUserItems,
   createItem,
   deleteItem,
   editItem,

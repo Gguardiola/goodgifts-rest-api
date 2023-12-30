@@ -8,6 +8,45 @@ const dbWishlists = require('../database/wishlists');
 
 //FIXME: delete cascade when deleting a wishlist! (must delete the items, gifts and implications)
 
+//GET /items/getAll?userId=...&itemName=...&limit=...&offset=...
+router.get('/getAll',[
+    query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
+    query('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
+    query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
+    query('offset').isInt({ min: 0 }).toInt().withMessage('Invalid offset'),
+
+], checkAuth, async (req, res) => {
+    
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array());
+        return res.status(400).json({success: false, message: errors.array()});
+    }
+
+    try {
+        const requestedUser = req.query.userId;
+        const itemName = decodeURIComponent(req.query.itemName);
+        const { limit, offset } = req.query;
+        let user = await dbUsers.checkIfUserExists(requestedUser);
+        if(!user.rows.length > 0) {
+            console.log("Error: User NOT exists");
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        let items = await db.retrieveAllUserItems(requestedUser, itemName, limit, offset);
+        
+        if (!items.rows.length > 0) {
+            return res.status(404).json({ success: true, items: [] });
+        }
+        
+        items = items.rows;
+        return res.json({ success: true, items });
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
 //GET /items/get?userId=...&itemName=...
 router.get('/get',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
