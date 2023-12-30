@@ -214,13 +214,13 @@ router.patch('/edit',[
             res.json({ success: true, message: 'Item edited successfully' });
         }
         else {
-            if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
-                return res.status(400).json({ success: false, message: 'Invalid userId format' });
-            }
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
     } 
     catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
