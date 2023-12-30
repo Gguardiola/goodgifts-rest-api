@@ -19,7 +19,7 @@ const retrieveItemById = async (itemId) => {
 
 const createItem = async (userId, item_name, item_description, item_url, image_name) => {
   userId = userId.replace(/^"|"$/g, '');
-  await db.query('INSERT INTO items (user_id, item_name, item_description, item_link, image_name) VALUES ($1, $2, $3, $4, $5)', [userId, item_name, item_description, item_url, image_name]);
+  await db.query('INSERT INTO items (user_id, item_name, item_description, item_url, image_name) VALUES ($1, $2, $3, $4, $5)', [userId, item_name, item_description, item_url, image_name]);
 };
 
 const deleteItem = async(userId, itemId) => {
