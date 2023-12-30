@@ -22,7 +22,8 @@ module.exports = async (req, res, next) => {
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
-        req.userId = response.data.userId.replace(/^"|"$/g, '');;
+        fetchUserId = response.data.userId;
+        req.userId = fetchUserId.replace(/^"|"$/g, '');
 
         next();
     } catch (error) {
