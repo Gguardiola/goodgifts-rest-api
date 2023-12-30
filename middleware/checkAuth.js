@@ -23,7 +23,13 @@ module.exports = async (req, res, next) => {
             return res.status(response.status).json(response.data);
         }
         let fetchUserId = response.data.userId;
-        req.userId = fetchUserId.replace(/^"|"$/g, '');
+        if (typeof fetchUserId === 'string') {
+            req.userId = fetchUserId.replace(/^"|"$/g, '');
+          } else {
+            req.userId = fetchUserId;
+            // Handle the case where fetchUserId is not a string (optional)
+            console.error('fetchUserId is not a string:', fetchUserId);
+          }
 
         next();
     } catch (error) {
