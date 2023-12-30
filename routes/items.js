@@ -45,7 +45,6 @@ router.get('/get',[
 });
 
 // POST /items/create
-
 router.post('/create',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
