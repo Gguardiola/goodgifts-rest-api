@@ -28,7 +28,7 @@ const deleteWishlist = async (userId, wishlistName) => {
   userId = userId.replace(/^"|"$/g, '');
   try{
     await db.query('BEGIN');
-    await db.query('DELETE FROM gifts WHERE item_id = (SELECT id FROM items WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
+    await db.query('DELETE FROM gifts WHERE item_id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
     await db.query('DELETE FROM items WHERE id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
     await db.query('DELETE FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2)', [userId, wishlistName]);
     await db.query('DELETE FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
