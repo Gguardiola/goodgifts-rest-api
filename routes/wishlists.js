@@ -196,9 +196,6 @@ router.patch('/edit',[
 ////// ITEMS //////
 
 //PAGINATION!
-// GET /items/getAll/:userId/:wishlistName
-//headers: {Authorization: Bearer token}
-
 //GET /items/get/:itemId/:userId
 //headers: {Authorization: Bearer token}
 
