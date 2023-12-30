@@ -8,10 +8,9 @@ const dbWishlists = require('../database/wishlists');
 
 //FIXME: delete cascade when deleting a wishlist! (must delete the items, gifts and implications)
 
-//GET /items/getAll?userId=...&itemName=...&limit=...&offset=...
+//GET /items/getAll?userId=...&limit=...&offset=...
 router.get('/getAll',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    query('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
     query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
     query('offset').isInt({ min: 0 }).toInt().withMessage('Invalid offset'),
 
@@ -33,7 +32,7 @@ router.get('/getAll',[
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        let items = await db.retrieveAllUserItems(requestedUser, itemName, limit, offset);
+        let items = await db.retrieveAllUserItems(requestedUser, limit, offset);
         
         if (!items.rows.length > 0) {
             return res.status(404).json({ success: true, items: [] });
