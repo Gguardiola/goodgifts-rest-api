@@ -5,9 +5,9 @@ const requestLimiter = require('../middleware/requestLimiter');
 if(process.env.NODE_ENV != "production") require('dotenv').config();
 const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST; 
 //Explanation: These are the routes that will be used by the client to signup and login.
+const dbUsers = require('../database/users');
+const dbWishlists = require('../database/wishlists');
 
-const dbUsers = require('../database/dbUsers');
-const dbWishlists = require('../database/dbWishlists');
 // POST /auth/signup
 router.post('/signup', requestLimiter, async (req, res) => {
     const { email, password, username, lastname, birthday } = req.body;
