@@ -146,11 +146,11 @@ router.delete('/delete',[
         const wishlistName = req.body.wishlistName;
         const requestedUser = req.body.userId;
         if (userId == requestedUser) {
-            let wishlist = await db.retrieveWishlist(userId, wishlistName);
+            let wishlist = await db.retrieveWishlist(requestedUser, wishlistName);
             if (!wishlist.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Wishlist not found' });
             }
-            await db.deleteWishlist(userId, wishlistName);
+            await db.deleteWishlist(requestedUser, wishlistName);
             return res.json({ success: true, message: 'Wishlist deleted successfully' });
         }
         else {
@@ -186,11 +186,11 @@ router.patch('/edit',[
         const newName = req.body.newName;
         const requestedUser = req.body.userId;
         if (userId == requestedUser) {
-            let wishlist = await db.retrieveWishlist(userId, wishlistName);
+            let wishlist = await db.retrieveWishlist(requestedUser, wishlistName);
             if (!wishlist.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Wishlist not found' });
             }
-            await db.editWishlist(userId, wishlistName, newName);
+            await db.editWishlist(requestedUser, wishlistName, newName);
             return res.json({ success: true, message: 'Wishlist edited successfully' });
         }
         else {
