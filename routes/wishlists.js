@@ -66,20 +66,16 @@ router.get('/get',[
             console.log("Error: User NOT exists");
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        console.log("check 1")
         let wishlist = await db.retrieveWishlist(requestedUser, wishlistName);
 
         if (!wishlist.rows.length > 0) {
             return res.status(404).json({ success: false, message: 'Wishlist not found' });
         }
-        let items = await db.retrieveWishlistItems(requestedUser, wishlistName);
-        console.log("check 2")
-        
+        let items = await db.retrieveWishlistItems(requestedUser, wishlistName);        
         if (!items.rows.length > 0) {
             return res.json({ success: true, wishlistName: wishlist.wishlist_name, createdAt: wishlist.created_at, items: [] });
         }
         items = items.rows;
-        console.log("check 3")
         return res.json({ success: true, wishlistName: wishlist.wishlist_name, createdAt: wishlist.created_at, items });
 
     } catch (error) {
