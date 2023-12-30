@@ -4,7 +4,6 @@ const checkAuth = require('../middleware/checkAuth');
 const requestLimiter = require('../middleware/requestLimiter');
 const db = require('../database/wishlists')
 const dbUsers = require('../database/users')
-const decodeString = require('../utils/decodeString');
 
 // GET /wishlists/getAll?userId=...&limit=...&offset=...
 router.get('/getAll',[
@@ -57,7 +56,7 @@ router.get('/get',[
 
     try {
         const requestedUser = req.query.userId;
-        const wishlistName =  decodeString(req.query.wishlistName);
+        const wishlistName =  decodeURIComponent(req.query.wishlistName);
         let user = await dbUsers.checkIfUserExists(requestedUser);
         if(!user.rows.length > 0) {
             console.log("Error: User NOT exists");
@@ -196,7 +195,7 @@ router.patch('/edit',[
 ////// ITEMS //////
 
 //PAGINATION!
-//GET /items/get/:itemId/:userId
+//GET /items/get?itemName=...&wishlistName=...&limit=...&offset=...
 //headers: {Authorization: Bearer token}
 
 // POST /items/add
