@@ -3,7 +3,7 @@ const db = require('./db');
 const retrieveWishlist = async (userId, wishlistName) => {
   userId = userId.replace(/^"|"$/g, '');
   console.log(userId);
-  const result = await db.query('SELECT * FROM wishlists WHERE user_id = $1::uuid AND wishlist_name = $2', [userId, wishlistName]);
+  const result = await db.query('SELECT * FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
   return result;
 };
 
