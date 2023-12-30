@@ -1,6 +1,7 @@
 const db = require('./db');
 
 const checkIfUserExists = async (userId) => {
+  userId = userId.replace(/^"|"$/g, '');
   const result = await db.query('SELECT id FROM users WHERE id = $1', [userId]);
   return result;
 };
