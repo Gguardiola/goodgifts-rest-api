@@ -95,7 +95,7 @@ router.patch('/profile/update', requestLimiter,[
 
     try {
         const userId = req.userId;
-        const requestedUser = req.body.userId;
+        const requestedUser = req.body.userId.replace(/^"|"$/g, '');
         const {email, username, lastname, bioDesc, birthday, image_name } = req.body;
         if(userId == requestedUser) {
             const updateFields = {email, username, lastname, bioDesc, birthday, image_name };
