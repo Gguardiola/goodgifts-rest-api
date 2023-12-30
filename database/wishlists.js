@@ -27,12 +27,16 @@ const createWishlist = async (userId, wishlistName) => {
 const deleteWishlist = async (userId, wishlistName) => {
   userId = userId.replace(/^"|"$/g, '');
   try{
-    await db.query('BEGIN');
-    await db.query('DELETE FROM gifts WHERE item_id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
-    await db.query('DELETE FROM items WHERE id = (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
+    // Delete records from item_wishlists first
     await db.query('DELETE FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2)', [userId, wishlistName]);
+
+    // Delete records from gifts and items
+    await db.query('DELETE FROM gifts WHERE item_id IN (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
+    await db.query('DELETE FROM items WHERE id IN (SELECT item_id FROM item_wishlists WHERE wishlist_id = (SELECT id FROM wishlists WHERE user_id = $1 AND wishlist_name = $2))', [userId, wishlistName]);
+
+    // Finally, delete the wishlist
     await db.query('DELETE FROM wishlists WHERE user_id = $1 AND wishlist_name = $2', [userId, wishlistName]);
-    await db.query('COMMIT');
+
   } catch (error){
     await db.query('ROLLBACK');
     throw error;
