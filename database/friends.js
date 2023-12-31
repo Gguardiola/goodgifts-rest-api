@@ -2,7 +2,7 @@ const db = require('./db');
 
 const retrieveFriends = async (userId, limit, offset) => {
   userId = userId.replace(/^"|"$/g, '');
-  const result = await db.query('SELECT * FROM friends WHERE user_id = $1 AND is_friend = true LIMIT $2 OFFSET $3', [userId, limit, offset]);
+  const result = await db.query('SELECT * FROM friends WHERE user_id = $1 OR friend_id = $1 AND is_friend = true LIMIT $2 OFFSET $3', [userId, limit, offset]);
   return result;
 };
 
