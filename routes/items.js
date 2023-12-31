@@ -331,8 +331,6 @@ router.delete('/deleteFromWishlist',[
     }
 });
 
-///// GIFTS /////
-
 //PAGINATION!
 //GET /gifts/getAll/:userId/:state
 //headers: {Authorization: Bearer token}
