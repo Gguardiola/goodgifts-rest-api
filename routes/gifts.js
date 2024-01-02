@@ -65,6 +65,9 @@ router.get('/get',[
         const giftId = req.query.giftId;
 
         let gift = await db.retrieveGiftById(userId, giftId);
+        if (!gift.rows.length > 0) {
+            return res.status(404).json({ success: false, message: 'Gift not found' });
+        }
         if(gift.rows[0].gifted_user_id == userId) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
