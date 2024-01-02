@@ -391,7 +391,7 @@ router.get('/implications/sended',[
         const requestedUser = req.query.userId;
         const {limit, offset} = req.query;
 
-        let user = await dbUsers.checkIfUserExists(userId);
+        let user = await dbUsers.checkIfUserExists(requestedUser);
         if(!user.rows.length > 0) {
             console.log("Error: User NOT exists");
             return res.status(404).json({ success: false, message: 'User not found' });
