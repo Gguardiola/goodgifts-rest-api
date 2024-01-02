@@ -6,7 +6,7 @@ const db = require('../database/gifts')
 const dbUsers = require('../database/users');
 const dbItems = require('../database/items');
 
-//GET /gifts/getAll?userId=...&limit=...&offset=...
+// GET /gifts/getAll?userId=...&limit=...&offset=...
 router.get('/getAll',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
@@ -48,7 +48,7 @@ router.get('/getAll',[
     }
 });
 
-//GET /gifts/get?giftId=...
+// GET /gifts/get?giftId=...
 router.get('/get',[
     query('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
 
@@ -283,8 +283,8 @@ router.post('/complete',[
     }
 });
 
-// GET /gifts/implication/requests?giftId=...&limit=...&offset=...
-router.get('/implication/requests',[
+// GET /gifts/implications/requests?giftId=...&limit=...&offset=...
+router.get('/implications/requests',[
     query('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
     query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
     query('offset').isInt({ min: 0 }).toInt().withMessage('Invalid offset'),
@@ -369,7 +369,7 @@ router.get('/implications',[
     }
 });
 
-//GET /gifts/implications/sended?userId=...&limit=...&offset=...
+// GET /gifts/implications/sended?userId=...&limit=...&offset=...
 router.get('/implications/sended',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
@@ -466,7 +466,7 @@ router.post('/implications/send',[
     }
 });
 
-// POST /gifts/implication/accept
+// POST /gifts/implications/accept
 router.post('/implications/accept',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),

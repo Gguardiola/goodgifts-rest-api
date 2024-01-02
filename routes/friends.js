@@ -38,7 +38,7 @@ router.get('/getAll', [
     }
 });
 
-//GET /friends/check?userId=...&friendId=...
+// GET /friends/check?userId=...&friendId=...
 router.get('/check', [
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),

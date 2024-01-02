@@ -6,7 +6,7 @@ const db = require('../database/items')
 const dbUsers = require('../database/users');
 const dbWishlists = require('../database/wishlists');
 
-//GET /items/getAll?userId=...&limit=...&offset=...
+// GET /items/getAll?userId=...&limit=...&offset=...
 router.get('/getAll',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
@@ -46,7 +46,7 @@ router.get('/getAll',[
     }
 });
 
-//GET /items/get?userId=...&itemName=...
+// GET /items/get?userId=...&itemName=...
 router.get('/get',[
     query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     query('itemName').isLength({ min: 1 }).withMessage('Invalid itemName'),
@@ -330,43 +330,5 @@ router.delete('/deleteFromWishlist',[
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
-
-//PAGINATION!
-//GET /gifts/getAll/:userId/:state
-//headers: {Authorization: Bearer token}
-
-//GET /gifts/get/:giftName
-//headers: {Authorization: Bearer token}
-
-// POST /gifts/create
-//headers: {Authorization: Bearer token}
-// body: {userId -> gifted, wishlistName, itemName, itemDescription, itemPrice, itemLink, image_name}
-
-// DELETE /gifts/delete
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id}
-
-// PATCH /gifts/edit
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id, itemName, itemDescription, itemPrice, itemLink, image_name}
-
-// GET /gifts/getImplicationRequests/:giftId
-//headers: {Authorization: Bearer token}
-
-// POST /gifts/implication/accept
-//headers: {Authorization: Bearer token}
-// body: {userId, gift_id}
-
-// DELETE /gifts/implication/reject
-//headers: {Authorization: Bearer token}
-// body: {userId, gift_id}
-
-// GET /gifts/getImplications/:giftId
-
-// POST /gifts/complete
-//headers: {Authorization: Bearer token}
-// body: {userId -> logged, gift_id}
-
-
 
 module.exports = router;

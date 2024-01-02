@@ -85,14 +85,7 @@ const retrieveImplication = async (userId, giftId) => {
 
 const acceptImplication = async (userId, giftId) => {
     userId = userId.replace(/^"|"$/g, '');
-    try {
-        await db.query('BEGIN');
-        await db.query('UPDATE user_gifts SET is_implicated = true WHERE gift_id = $1 AND user_id = $2', [giftId, userId]);
-        await db.query('COMMIT');
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error;
-    }
+    await db.query('UPDATE user_gifts SET is_implicated = true WHERE gift_id = $1 AND user_id = $2', [giftId, userId]);
 }
 
 const deleteImplication = async (userId, giftId) => {
