@@ -144,7 +144,7 @@ router.post('/create',[
 // DELETE /gifts/delete
 router.delete('/delete',[   
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('gift_id').isLength({ min: 1 }).withMessage('Invalid gift_id'),    
+    body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),    
 ], checkAuth, async (req, res) => {
 
     const errors = validationResult(req);
@@ -156,18 +156,18 @@ router.delete('/delete',[
     try {
         const userId = req.userId;
         const requestedUser = req.body.userId;
-        const { gift_id } = req.body;
+        const giftId = req.body.giftId;
 
         if(userId == requestedUser) {
 
-            let gift = await db.retrieveGiftById(userId, gift_id);
+            let gift = await db.retrieveGiftById(userId, giftId);
             if (!gift.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Gift not found' });
             }
             if(gift.rows[0].user_id != userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
             }
-            await db.deleteGift(userId, gift_id);
+            await db.deleteGift(userId, giftId);
             return res.json({ success: true, message: 'Gift deleted successfully' });
         }
         else {
@@ -419,7 +419,7 @@ router.get('/implications/sended',[
 //POST /gifts/implications/send
 router.post('/implications/send',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('giftId').isLength({ min: 1 }).withMessage('Invalid gift_id'),
+    body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
 ], checkAuth, async (req, res) => {
 
     const errors = validationResult(req);
@@ -469,7 +469,7 @@ router.post('/implications/send',[
 // POST /gifts/implication/accept
 router.post('/implications/accept',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('giftId').isLength({ min: 1 }).withMessage('Invalid gift_id'),
+    body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
     body('implicationUserId').isLength({ min: 1 }).withMessage('Invalid implicationUserId'),
 ], checkAuth, async (req, res) => {
 
@@ -520,7 +520,7 @@ router.post('/implications/accept',[
 // DELETE /gifts/implications/reject
 router.delete('/implications/reject',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
-    body('giftId').isLength({ min: 1 }).withMessage('Invalid gift_id'),
+    body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
 
 ], checkAuth, async (req, res) => {
 
