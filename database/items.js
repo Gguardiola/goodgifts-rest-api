@@ -24,9 +24,17 @@ const createItem = async (userId, item_name, item_description, item_url, image_n
 
 const deleteItem = async(userId, itemId) => {
   userId = userId.replace(/^"|"$/g, '');
-  await db.query('DELETE FROM gifts WHERE item_id = $1', [itemId]);
-  await db.query('DELETE FROM item_wishlists WHERE item_id = $1', [itemId]);
-  await db.query('DELETE FROM items WHERE user_id = $1 AND id = $2', [userId, itemId]); 
+  try {
+    await db.query('BEGIN');
+    await db.query('DELETE FROM user_gifts WHERE gift_id IN (SELECT id FROM gifts WHERE item_id = $1)', [itemId]);
+    await db.query('DELETE FROM gifts WHERE item_id = $1', [itemId]);
+    await db.query('DELETE FROM item_wishlists WHERE item_id = $1', [itemId]);
+    await db.query('DELETE FROM items WHERE user_id = $1 AND id = $2', [userId, itemId]); 
+    await db.query('COMMIT');
+  } catch (error) {
+    await db.query('ROLLBACK');
+    throw error;
+  }
 };
 
 const editItem = async (itemId, editFields) => {
