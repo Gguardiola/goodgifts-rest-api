@@ -119,6 +119,11 @@ router.post('/create',[
                 return res.status(404).json({ success: false, message: 'Gifted user not found' });
             }
 
+            let gift = await db.retrieveUserGift(userId, gift_name);
+            if (gift.rows.length > 0) {
+                return res.status(400).json({ success: false, message: 'Gift already exists' });
+            }
+
             if(userId != gifted_user_id) {
                 let item = await dbItems.retrieveItemById(itemId);
 
@@ -216,6 +221,10 @@ router.patch('/edit',[
             gift = await db.retrieveGiftById(userId, giftId);
             if (!gift.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Gift not found' });
+            }
+
+            if (gift.rows[0].gift_name == gift_name) {
+                return res.status(400).json({ success: false, message: 'Gift with that name already exists' });
             }
             if(gift.rows[0].user_id != userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
