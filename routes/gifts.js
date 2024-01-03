@@ -295,6 +295,49 @@ router.post('/complete',[
     }
 });
 
+// GET /gifts/recieved?userId=...&limit=...&offset=...
+router.get('/recieved',[
+    query('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
+    query('limit').isInt({ min: 1 }).toInt().withMessage('Invalid limit'),
+    query('offset').isInt({ min: 0 }).toInt().withMessage('Invalid offset'),
+], checkAuth, async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array());
+        return res.status(400).json({success: false, message: errors.array()});
+    }
+    try {
+        const userId = req.userId;
+        const requestedUser = req.query.userId;
+        const { limit, offset } = req.query;
+        let user = await dbUsers.checkIfUserExists(requestedUser);
+        if(!user.rows.length > 0) {
+            console.log("Error: User NOT exists");
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        if(userId == requestedUser) {
+
+            let gifts = await db.retrieveUserRecievedGifts(requestedUser, limit, offset);
+            if (!gifts.rows.length > 0) {
+                return res.status(404).json({ success: true, gifts: [] });
+            }
+            gifts = gifts.rows;
+            return res.json({ success: true, gifts });
+        }
+        else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+    } catch (error) {
+        if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
+            return res.status(400).json({ success: false, message: 'Invalid userId format' });
+        }
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+}
+});
+
 // GET /gifts/implications/requests?giftId=...&limit=...&offset=...
 router.get('/implications/requests',[
     query('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),

@@ -60,6 +60,11 @@ const retrieveImplicationRequests = async (giftId, limit, offset) => {
     return result;
 }
 
+const retrieveUserRecievedGifts = async (userId, limit, offset) => {
+    userId = userId.replace(/^"|"$/g, '');
+    const result = await db.query('SELECT * FROM gifts WHERE gifted_user_id = $1 AND is_delivered = true LIMIT $2 OFFSET $3', [userId, limit, offset]);
+    return result;
+}
 const retrieveImplications = async (giftId, limit, offset) => {
     const result = await db.query('SELECT * FROM user_gifts WHERE gift_id = $1 AND is_implicated = true LIMIT $2 OFFSET $3', [giftId, limit, offset]);
     return result;
@@ -102,6 +107,7 @@ module.exports = {
     retrieveAllUserGifts,
     retrieveGiftById,
     retrieveUserGift,
+    retrieveUserRecievedGifts,
     createGift, 
     deleteGift,
     editGift,
