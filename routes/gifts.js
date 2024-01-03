@@ -601,7 +601,7 @@ router.delete('/implications/reject',[
                 return res.status(404).json({ success: false, message: 'Implication not found' });
             }
 
-            await db.deleteImplication(userId, giftId);
+            await db.deleteImplication(implicationUserId, giftId);
             return res.json({ success: true, message: 'Implication rejected successfully' });
 
         } else {
