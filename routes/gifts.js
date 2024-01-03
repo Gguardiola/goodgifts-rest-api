@@ -210,8 +210,7 @@ router.patch('/edit',[
         const {gift_name} = req.body;
 
         let user = await dbUsers.checkIfUserExists(userId);
-        let requestedUserCheck = await dbUsers.checkIfUserExists(requestedUser);
-        if(!user.rows.length > 0 || requestedUserCheck.rows.length > 0) {
+        if(!user.rows.length > 0) {
             console.log("Error: User NOT exists");
             return res.status(404).json({ success: false, message: 'User not found' });
         }
