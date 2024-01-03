@@ -187,6 +187,10 @@ router.patch('/edit',[
             if (!wishlist.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Wishlist not found' });
             }
+            let wishlistNewName = await db.retrieveWishlist(requestedUser, newName);
+            if (wishlistNewName.rows.length > 0) {
+                return res.status(409).json({ success: false, message: 'Wishlist with that name already exists' });
+            }
             await db.editWishlist(requestedUser, wishlistName, newName);
             return res.json({ success: true, message: 'Wishlist edited successfully' });
         }
