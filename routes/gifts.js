@@ -149,8 +149,8 @@ router.post('/create',[
     }
 });
 
-// PATCH /gifts/delete
-router.patch('/delete',[   
+// DELETE /gifts/delete
+router.delete('/delete',[   
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),    
 ], checkAuth, async (req, res) => {
@@ -564,8 +564,8 @@ router.post('/implications/accept',[
     }
 });
 
-// PATCH /gifts/implications/reject
-router.patch('/implications/reject',[
+// DELETE /gifts/implications/reject
+router.delete('/implications/reject',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
     body('implicationUserId').isLength({ min: 1 }).withMessage('Invalid implicationUserId'),

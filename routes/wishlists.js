@@ -125,8 +125,8 @@ router.post('/create',[
     }
 });
 
-// PATCH /wishlists/delete
-router.patch('/delete',[
+// DELETE /wishlists/delete
+router.delete('/delete',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('wishlistName').isLength({ min: 5 }).isString().withMessage('Invalid wishlistName')
 

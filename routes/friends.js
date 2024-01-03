@@ -81,7 +81,7 @@ router.get('/check', [
             return res.json({ success: true, relation: 'request_sent' });
         }
         if (friendshipRequestBack.rows.length > 0) {
-            return res.json({ success: true, relation: 'request_received' });
+            return res.json({ success: true, relation: 'request_recieved' });
         }
         return res.json({ success: true, relation: 'none' });
     } catch (error) {
@@ -161,8 +161,8 @@ router.post('/add', [
     }
 });
 
-// PATCH /friends/delete
-router.patch('/delete', [
+// DELETE /friends/delete
+router.delete('/delete', [
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),
 ], checkAuth, async (req, res) => {
@@ -301,8 +301,8 @@ router.post('/requests/accept', [
     }
 });
 
-// PATCH /friends/requests/reject
-router.patch('/requests/reject', [
+// DELETE /friends/requests/reject
+router.delete('/requests/reject', [
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),
 ], checkAuth, async (req, res) => {

@@ -125,8 +125,8 @@ router.patch('/profile/update', requestLimiter,[
       }
 });
 
-// PATCH /users/profile/delete
-router.patch('/profile/delete', requestLimiter,[
+// DELETE /users/profile/delete
+router.delete('/profile/delete', requestLimiter,[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId')
 ], checkAuth, async (req, res) => {
 
