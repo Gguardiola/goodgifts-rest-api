@@ -48,10 +48,10 @@ const deleteUser = async (userId, token) => {
 
          await db.query('DELETE FROM user_sessions WHERE user_id = $1', [userId]);
          await db.query('DELETE FROM friends WHERE user_id = $1 OR friend_id = $1', [userId]);
-         await db.query('DELETE FROM gifts WHERE id IN (SELECT g.id FROM gifts g JOIN items i ON g.item_id = i.id WHERE i.wishlist_id IN (SELECT id FROM wishlists WHERE user_id = $1))', [userId]);
+         await db.query('DELETE FROM user_gifts WHERE user_id = $1', [userId]);
+         await db.query('DELETE FROM gifts WHERE user_id = $1', [userId]);
          await db.query('DELETE FROM items WHERE user_id = $1', [userId]);
          await db.query('DELETE FROM wishlists WHERE user_id = $1', [userId]);
-         await db.query('DELETE FROM user_gifts WHERE user_id = $1', [userId]);
          await db.query('INSERT INTO token_blacklist (token) VALUES ($1)', [token]);
          await db.query('DELETE FROM users WHERE id = $1', [userId]);
  
