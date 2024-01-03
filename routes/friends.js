@@ -161,8 +161,8 @@ router.post('/add', [
     }
 });
 
-// DELETE /friends/delete
-router.delete('/delete', [
+// PATCH /friends/delete
+router.patch('/delete', [
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),
 ], checkAuth, async (req, res) => {
@@ -301,8 +301,8 @@ router.post('/requests/accept', [
     }
 });
 
-// DELETE /friends/requests/reject
-router.delete('/requests/reject', [
+// PATCH /friends/requests/reject
+router.patch('/requests/reject', [
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('friendId').isLength({ min: 1 }).withMessage('Invalid friendId'),
 ], checkAuth, async (req, res) => {

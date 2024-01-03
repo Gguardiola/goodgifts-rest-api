@@ -128,8 +128,8 @@ router.post('/create',[
     }   
 });
 
-// DELETE /items/delete
-router.delete('/delete',[
+// PATCH /items/delete
+router.patch('/delete',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('item_name').isLength({ min: 1 }).withMessage('Invalid item name'),
 ], checkAuth, async (req, res) => {
@@ -278,8 +278,8 @@ router.post('/addToWishlist',[
     }
 });
 
-// DELETE /items/deleteFromWishlist
-router.delete('/deleteFromWishlist',[
+// PATCH /items/deleteFromWishlist
+router.patch('/deleteFromWishlist',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('itemId').isLength({ min: 1 }).withMessage('Invalid itemId'),
     body('wishlistName').isLength({ min: 1 }).withMessage('Invalid wishlistName'),

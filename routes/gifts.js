@@ -149,8 +149,8 @@ router.post('/create',[
     }
 });
 
-// DELETE /gifts/delete
-router.delete('/delete',[   
+// PATCH /gifts/delete
+router.patch('/delete',[   
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),    
 ], checkAuth, async (req, res) => {
@@ -175,7 +175,7 @@ router.delete('/delete',[
             if(gift.rows[0].user_id != userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
             }
-            await db.deleteGift(userId, giftId);
+            await db.patchGift(userId, giftId);
             return res.json({ success: true, message: 'Gift deleted successfully' });
         }
         else {
@@ -564,8 +564,8 @@ router.post('/implications/accept',[
     }
 });
 
-// DELETE /gifts/implications/reject
-router.delete('/implications/reject',[
+// PATCH /gifts/implications/reject
+router.patch('/implications/reject',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
     body('implicationUserId').isLength({ min: 1 }).withMessage('Invalid implicationUserId'),
