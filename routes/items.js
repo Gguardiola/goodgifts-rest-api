@@ -198,7 +198,9 @@ router.patch('/edit',[
             if (!item.rows.length > 0) {
                 return res.status(404).json({ success: false, message: 'Item not found' });
             }
-            
+            if(item.rows[0].user_id != requestedUser) {
+                return res.status(401).json({ success: false, message: 'Unauthorized' });
+            }
             const editFields = { item_name, item_description, item_url, image_name};
             const filteredEditFields = Object.fromEntries(
             Object.entries(editFields).filter(([key, value]) => value !== undefined)
