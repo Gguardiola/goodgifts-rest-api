@@ -21,17 +21,10 @@ const retrieveGiftById = async (userId, giftId) => {
 const createGift = async (userId, itemId, gifted_user_id, expiration_date, gift_name) => {
     userId = userId.replace(/^"|"$/g, '');
     gifted_user_id = gifted_user_id.replace(/^"|"$/g, '');
-    try {
-        await db.query('BEGIN');
-        await db.query('INSERT INTO gifts (item_id, gift_name, gifted_user_id, is_delivered, expiration_date, user_id) VALUES ($1, $2, $3, false, $4, $5)', [itemId, gift_name, gifted_user_id, expiration_date, userId]);
-        let giftId = retrieveUserGift(userId, gift_name);
-        giftId = giftId.rows[0].id;
-        await db.query('INSERT INTO user_gifts (user_id, gift_id, is_implicated) VALUES ($1, $2, true)', [userId, giftId]);
-        await db.query('COMMIT');
-    } catch (error) {
-        await db.query('ROLLBACK');
-        throw error;
-    }
+    await db.query('INSERT INTO gifts (item_id, gift_name, gifted_user_id, is_delivered, expiration_date, user_id) VALUES ($1, $2, $3, false, $4, $5)', [itemId, gift_name, gifted_user_id, expiration_date, userId]);
+    let giftId = retrieveUserGift(userId, gift_name);
+    giftId = giftId.rows[0].id;
+    await db.query('INSERT INTO user_gifts (user_id, gift_id, is_implicated) VALUES ($1, $2, true)', [userId, giftId]);
 }
 
 const deleteGift = async (userId, giftId) => {
