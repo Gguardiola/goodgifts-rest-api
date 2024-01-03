@@ -32,7 +32,7 @@ router.get('/getAll',[
         let items = await db.retrieveAllUserItems(requestedUser, limit, offset);
         
         if (!items.rows.length > 0) {
-            return res.status(404).json({ success: true, items: [] });
+            return res.json({ success: true, items: [] });
         }
         
         items = items.rows;

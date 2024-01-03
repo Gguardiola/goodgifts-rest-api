@@ -19,7 +19,7 @@ router.post('/signup', requestLimiter, async (req, res) => {
         }
         res.json({success: true, message: 'Signup successful'});
         const currentUserId = await dbUsers.retrieveUserId(email);
-        dbWishlists.createWishlist(currentUserId.rows[0].id, "My Wishlist");
+        dbWishlists.createWishlist(currentUserId.rows[0].id, "My wishlist");
 
     } catch (error) {
         console.error('Error:', error.message);

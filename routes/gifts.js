@@ -34,7 +34,7 @@ router.get('/getAll',[
         let gifts = await db.retrieveAllUserGifts(requestedUser, userId, limit, offset);
         
         if (!gifts.rows.length > 0) {
-            return res.status(404).json({ success: true, gifts: [] });
+            return res.json({ success: true, gifts: [] });
         }
         
         gifts = gifts.rows;
@@ -314,25 +314,20 @@ router.get('/recieved',[
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        if(userId == requestedUser) {
+        let gifts = await db.retrieveUserRecievedGifts(requestedUser, limit, offset);
+        if (!gifts.rows.length > 0) {
+            return res.json({ success: true, gifts: [] });
+        }
+        gifts = gifts.rows;
+        return res.json({ success: true, gifts });
 
-            let gifts = await db.retrieveUserRecievedGifts(requestedUser, limit, offset);
-            if (!gifts.rows.length > 0) {
-                return res.status(404).json({ success: true, gifts: [] });
-            }
-            gifts = gifts.rows;
-            return res.json({ success: true, gifts });
-        }
-        else {
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
-        }
     } catch (error) {
         if (error.message.includes('replace is not a function') || error.message.includes('invalid input syntax for type uuid')) {
             return res.status(400).json({ success: false, message: 'Invalid userId format' });
         }
         console.error('Error:', error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
-}
+    }
 });
 
 // GET /gifts/implications/requests?giftId=...&limit=...&offset=...
@@ -450,7 +445,7 @@ router.get('/implications/sended',[
 
             let implications = await db.retrieveUserImplicationsRequested(userId, limit, offset);
             if (!implications.rows.length > 0) {
-                return res.status(404).json({ success: true, implications: [] });
+                return res.json({ success: true, implications: [] });
             }
             implications = implications.rows;
             return res.json({ success: true, implications });
