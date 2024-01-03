@@ -488,7 +488,7 @@ router.post('/implications/send',[
         const requestedUser = req.body.userId;
         const giftId = req.body.giftId;
 
-        if(user == requestedUser) {
+        if(userId == requestedUser) {
                 
                 let gift = await db.retrieveGiftById(userId, giftId);
                 if (!gift.rows.length > 0) {
