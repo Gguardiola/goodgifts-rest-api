@@ -121,7 +121,7 @@ router.post('/create',[
 
             let gift = await db.retrieveUserGift(userId, gift_name);
             if (gift.rows.length > 0) {
-                return res.status(400).json({ success: false, message: 'Gift already exists' });
+                return res.status(409).json({ success: false, message: 'Gift already exists' });
             }
 
             if(userId != gifted_user_id) {
@@ -223,7 +223,7 @@ router.patch('/edit',[
             }
 
             if (gift.rows[0].gift_name == gift_name) {
-                return res.status(400).json({ success: false, message: 'Gift with that name already exists' });
+                return res.status(409).json({ success: false, message: 'Gift with that name already exists' });
             }
             if(gift.rows[0].user_id != userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
@@ -495,7 +495,7 @@ router.post('/implications/send',[
                 }
                 let implication = await db.retrieveImplication(requestedUser, giftId);
                 if (implication.rows.length > 0) {
-                    return res.status(400).json({ success: false, message: 'Implication already exists' });
+                    return res.status(409).json({ success: false, message: 'Implication already exists' });
                 }
                 await db.sendImplication(requestedUser, giftId);
                 return res.json({ success: true, message: 'Implication sent successfully' });

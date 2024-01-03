@@ -107,7 +107,7 @@ router.post('/create',[
         if (userId == requestedUser) {
             let wishlist = await db.retrieveWishlist(userId, wishlistName);
             if (wishlist.rows.length > 0) {
-                return res.status(400).json({ success: false, message: 'Wishlist already exists' });
+                return res.status(409).json({ success: false, message: 'Wishlist already exists' });
             }
             await db.createWishlist(userId, wishlistName);
             return res.json({ success: true, message: 'Wishlist created successfully' });

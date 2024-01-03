@@ -129,21 +129,21 @@ router.post('/add', [
             const friendshipRequestBack = await db.checkIfFriendshipRequestExists(friendId, userId);
             if (friendshipRequest.rows.length > 0) {
                 console.log("Error: Friendship request already exists");
-                return res.status(400).json({ success: false, message: 'Friendship request already exists' });
+                return res.status(409).json({ success: false, message: 'Friendship request already exists' });
             }
             if (friendshipRequestBack.rows.length > 0) {
                 console.log("Error: Friendship request already exists");
-                return res.status(400).json({ success: false, message: 'Friendship request already exists' });
+                return res.status(409).json({ success: false, message: 'Friendship request already exists' });
             }
             const friendship = await db.checkIfFriendshipExists(userId, friendId);
             const friendshipBack = await db.checkIfFriendshipExists(friendId, userId);
             if (friendship.rows.length > 0) {
                 console.log("Error: Friendship already exists");
-                return res.status(400).json({ success: false, message: 'Friendship already exists' });
+                return res.status(409).json({ success: false, message: 'Friendship already exists' });
             }
             if (friendshipBack.rows.length > 0) {
                 console.log("Error: Friendship already exists");
-                return res.status(400).json({ success: false, message: 'Friendship already exists' });
+                return res.status(409).json({ success: false, message: 'Friendship already exists' });
             }
             await db.addFriend(userId, friendId);
             res.json({ success: true, message: 'Friendship added' });
