@@ -2,7 +2,7 @@ const db = require('./db');
 
 const retrieveAllUserGifts = async (requestedUser, userId, limit, offset) => {
     userId = userId.replace(/^"|"$/g, '');
-    const result = await db.query('SELECT * FROM gifts WHERE id = (SELECT gift_id FROM user_gifts WHERE user_id = $2) AND gifted_user_id != $1 LIMIT $3 OFFSET $4', [requestedUser, userId, limit, offset]);
+    const result = await db.query('SELECT * FROM gifts WHERE id IN (SELECT gift_id FROM user_gifts WHERE user_id = $2) AND gifted_user_id != $1 LIMIT $3 OFFSET $4', [requestedUser, userId, limit, offset]);
     return result;
 }
 
