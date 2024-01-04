@@ -45,3 +45,7 @@ Depending of the request the API will respond with an specific code. These are t
 | `409` | Already Exists. One of the params provided already exists. |
 | `429` | Too many requests from this IP, please try again later. |
 | `500` | Internal Server Error. Unhandled error happened inside the server. |
+
+## API routes
+
+You can view all the routes, examples, requests and responses in the (Postman API documentation)[https://documenter.getpostman.com/view/31354348/2s9YsFFZtQ].
