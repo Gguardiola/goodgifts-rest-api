@@ -175,7 +175,7 @@ router.delete('/delete',[
             if(gift.rows[0].user_id != userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
             }
-            await db.patchGift(userId, giftId);
+            await db.deleteGift(userId, giftId);
             return res.json({ success: true, message: 'Gift deleted successfully' });
         }
         else {
