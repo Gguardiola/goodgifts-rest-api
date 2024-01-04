@@ -629,23 +629,24 @@ router.delete('/implications/delete',[
         const requestedUser = req.body.userId;
         const giftId = req.body.giftId;
 
-        let gift = await db.retrieveGiftById(userId, giftId);
-        if (!gift.rows.length > 0) {
-            return res.status(404).json({ success: false, message: 'Gift not found' });
-        }
-        if(gift.rows[0].gifted_user_id == userId) {
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
-        }
-        let implication = await db.retrieveImplication(requestedUser, giftId);
-        if (!implication.rows.length > 0) {
-            return res.status(404).json({ success: false, message: 'Implication not found' });
-        }
-        if(implication.rows[0].user_id != userId) {
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
-        }
+        if(userId == requestedUser) {
+            let gift = await db.retrieveGiftById(userId, giftId);
+            if (!gift.rows.length > 0) {
+                return res.status(404).json({ success: false, message: 'Gift not found' });
+            }
+            if(gift.rows[0].gifted_user_id == userId) {
+                return res.status(401).json({ success: false, message: 'Unauthorized' });
+            }
+            let implication = await db.retrieveImplication(requestedUser, giftId);
+            if (!implication.rows.length > 0) {
+                return res.status(404).json({ success: false, message: 'Implication not found' });
+            }
 
-        await db.deleteImplication(requestedUser, giftId);
-        return res.json({ success: true, message: 'Implication deleted successfully' });
+            await db.deleteImplication(requestedUser, giftId);
+            return res.json({ success: true, message: 'Implication deleted successfully' });
+        } else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
     } 
     catch (error) {
         console.error('Error:', error.message);
