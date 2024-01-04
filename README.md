@@ -1,6 +1,6 @@
 The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com).
 
-## What is GoodGifts?
+## What is GoodGifts API?
 
 GoodGifts is a web application where you can have wishlists with items that you want for your birthday, Christmas or any other kind of event involving gifts.
 
