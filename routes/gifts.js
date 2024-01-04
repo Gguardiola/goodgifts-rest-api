@@ -612,5 +612,46 @@ router.delete('/implications/reject',[
     }
 });
 
+// DELETE /implications/delete
+router.delete('/implications/delete',[
+    body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
+    body('giftId').isLength({ min: 1 }).withMessage('Invalid giftId'),
+], checkAuth, async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log("Error validating input: "+errors.array()); 
+        return res.status(400).json({success: false, message: errors.array()});
+    }
+
+    try {
+        const userId = req.userId;
+        const requestedUser = req.body.userId;
+        const giftId = req.body.giftId;
+
+        if(userId == requestedUser) {
+            let gift = await db.retrieveGiftById(userId, giftId);
+            if (!gift.rows.length > 0) {
+                return res.status(404).json({ success: false, message: 'Gift not found' });
+            }
+            if(gift.rows[0].gifted_user_id == userId) {
+                return res.status(401).json({ success: false, message: 'Unauthorized' });
+            }
+            let implication = await db.retrieveImplication(requestedUser, giftId);
+            if (!implication.rows.length > 0) {
+                return res.status(404).json({ success: false, message: 'Implication not found' });
+            }
+            await db.deleteImplication(requestedUser, giftId);
+            return res.json({ success: true, message: 'Implication deleted successfully' });
+        }
+        else {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+    } 
+    catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 
 module.exports = router;
