@@ -8,7 +8,7 @@ You can also view other people's wishlists in case you want to get inspiration f
 
 To sumarize, this API can register new users, login users, logout users (secured with JWT token authentication), find, update and delete user profiles. Check, add and delete friends. Create, delete and edit wishlists. Find, create, delete, and edit items (to later add them to wishlists or gifts). And finally find, create, delete, complete and implicate other users to an existing gift.
 
-## Microservices architecture diagram
+## Microservices architecture diagram (Boira v1)
 
 <img src="https://content.pstmn.io/d120c632-cb99-4d02-9c2d-c0091865102e/Qm9pcmFNaWNyb3NlcnZpY2VzRGlhZ3JhbS12MS5wbmc=">
 
