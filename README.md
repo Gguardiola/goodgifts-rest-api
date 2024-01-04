@@ -48,4 +48,4 @@ Depending of the request the API will respond with an specific code. These are t
 
 ## API routes
 
-You can view all the routes, examples, requests and responses in the (Postman API documentation)[https://documenter.getpostman.com/view/31354348/2s9YsFFZtQ].
+You can view all the routes, examples, requests and responses in the [Postman API documentation](https://documenter.getpostman.com/view/31354348/2s9YsFFZtQ).
