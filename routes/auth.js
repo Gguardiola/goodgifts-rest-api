@@ -17,9 +17,9 @@ router.post('/signup', requestLimiter, async (req, res) => {
         if (!response.data.success) {
             return res.status(response.status).json(response.data);
         }
-        res.json({success: true, message: 'Signup successful'});
         const currentUserId = await dbUsers.retrieveUserId(email);
         dbWishlists.createWishlist(currentUserId.rows[0].id, "My wishlist");
+        res.json({success: true, message: 'Signup successful'});
 
     } catch (error) {
         console.error('Error:', error.message);
@@ -50,7 +50,7 @@ router.post('/login', requestLimiter, async (req, res) => {
             console.error('Response details:', error.response.data);
             return res.status(error.response.status).json(error.response.data);
         } else {
-            return res.status(500).json({ success: false, message: 'Internal server error' });
+            return res.status(500).json({ success: false, message: 'Internal server error',details: error.message });
         }
     }
 
