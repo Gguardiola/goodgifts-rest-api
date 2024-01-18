@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 app.set('trust proxy', true);
 app.use(express.json());
 

@@ -50,7 +50,7 @@ router.post('/login', requestLimiter, async (req, res) => {
             console.error('Response details:', error.response.data);
             return res.status(error.response.status).json(error.response.data);
         } else {
-            return res.status(500).json({ success: false, message: 'Internal server error',details: error.message });
+            return res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
 
