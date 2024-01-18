@@ -90,8 +90,6 @@ router.post('/create',[
     body('userId').isLength({ min: 1 }).withMessage('Invalid userId'),
     body('item_name').isLength({ min: 1 }).withMessage('Invalid item_name'),
     body('item_description').isLength({ min: 1 }).withMessage('Invalid item_description'),
-    body('item_url').withMessage('Invalid item_url'),
-    body('image_name').withMessage('Invalid image_name'),
 ], checkAuth, async (req, res) => {
 
     const errors = validationResult(req);
