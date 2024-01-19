@@ -1,9 +1,10 @@
 The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com/login).
 
-You can also visit the Next.js web application and the microservices architecture:
+You can also visit the rest of the services that are part of this project:
 
 - [Boira-microservices-v1](https://github.com/Gguardiola/Boira-Microservices-v1)
 - [GoodGifts Web Application](https://github.com/Gguardiola/goodgifts-nextjs-app)
+- [Auth-service (Express + JWT)](https://github.com/Gguardiola/auth-service)
 
 ## What is GoodGifts API?
 
