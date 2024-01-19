@@ -5,6 +5,11 @@ const app = express();
 app.set('trust proxy', true);
 app.use(express.json());
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const friends = require('./routes/friends');
