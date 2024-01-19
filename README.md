@@ -1,4 +1,4 @@
-The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com).
+The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com/login).
 
 ## What is GoodGifts API?
 
@@ -16,8 +16,8 @@ To sumarize, this API can register new users, login users, logout users (secured
 
 To start using GoodGifts API:
 
-- If you are using this API locally, the endpoint is `http://localhost:5000` and the oficial production/testing stage endpoint is `https://api.gabodev.com` . This means that the API will only respond HTTPS-secured communications. To clarify, the objective of this endpoint is to be deactivated once the development stage is finished and be accessible only from the internal communication streams.
-- Some API calls have **usage limits**. For example, the signup and the login **are limited to 50 requests within a range of 15 minutes from the same device**, avoiding bots from attacking the service.
+- If you are using this API locally, the endpoint is `http://localhost:5000/goodgifts` and the oficial production/testing stage endpoint is `https://api.gabodev.com/goodgifts` . This means that the API will only respond HTTPS-secured communications. To clarify, the objective of this endpoint is to be deactivated once the development stage is finished and be accessible only from the internal communication streams.
+- Some API calls have **usage limits**. For example, the signup and the login **are limited to 100 requests within a range of 15 minutes from the same device**, avoiding bots from attacking the service.
 - The API returns request responses in JSON format. When an API request is successfully completed, it will return an HTTP `200` response with a `success: true` field followed by the requested information if required. Otherwise, the JSON response will be `success: false` followed by `message: {error}` .
 - Every call will contain an `Authentication` header with the user token previously provided by the login.
     
