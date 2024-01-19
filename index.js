@@ -20,12 +20,12 @@ const gifts = require('./routes/gifts');
 if(process.env.NODE_ENV != "production") require('dotenv').config();
 const LISTEN_PORT = process.env.PORT;
 
-app.use('/auth', auth);
-app.use('/users', users);
-app.use('/friends', friends);
-app.use('/wishlists', wishlists);
-app.use('/items', items);
-app.use('/gifts', gifts);
+app.use('/goodgifts/auth', auth);
+app.use('/goodgifts/users', users);
+app.use('/goodgifts/friends', friends);
+app.use('/goodgifts/wishlists', wishlists);
+app.use('/goodgifts/items', items);
+app.use('/goodgifts/gifts', gifts);
 
 app.listen(LISTEN_PORT, () => {
     console.log("Goodgifts REST API is running on port "+ LISTEN_PORT);
