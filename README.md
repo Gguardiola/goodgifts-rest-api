@@ -1,5 +1,10 @@
 The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com/login).
 
+You can also visit the Next.js web application and the microservices architecture:
+
+- [Boira-microservices-v1](https://github.com/Gguardiola/Boira-Microservices-v1)
+- [GoodGifts Web Application](https://github.com/Gguardiola/goodgifts-nextjs-app)
+
 ## What is GoodGifts API?
 
 GoodGifts is a web application where you can have wishlists with items that you want for your birthday, Christmas or any other kind of event involving gifts.
@@ -49,3 +54,5 @@ Depending of the request the API will respond with an specific code. These are t
 ## API routes
 
 You can view all the routes, examples, requests and responses in the [Postman API documentation](https://documenter.getpostman.com/view/31354348/2s9YsFFZtQ).
+
+
