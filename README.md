@@ -1,3 +1,5 @@
+# GoodGifts REST API
+
 The GoodGifts API provides all the functionability for the [Web Application](https://goodgifts.gabodev.com/login).
 
 You can also visit the rest of the services that are part of this project:
